@@ -42,9 +42,10 @@ export default class Levels {
   generate_default () {
     const app = this._app
 
-    app.hero = app.addEntity(new Rabbit(app, 11, 1))
+    app.hero = app.addEntity(new Rabbit(app, 11.5, 1))
     app.camera.x = 0
     app.camera.y = 0
+    // app.camera.target = app.hero
 
     app.addRule(new CNY2023Controls(app))
 
