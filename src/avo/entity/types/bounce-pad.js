@@ -20,4 +20,11 @@ export default class BouncePad extends Entity {
     if (cutCorner !== 'se') this.shapePolygonPath.push(width * TILE_SIZE, height * TILE_SIZE)
     if (cutCorner !== 'sw') this.shapePolygonPath.push(0, height * TILE_SIZE)
   }
+
+  onCollision (target, collisionCorrection) {
+    super.onCollision(target, collisionCorrection)
+    
+    target.pushX = target.pushX * 2
+    target.pushY = target.pushY * 2
+  }
 }

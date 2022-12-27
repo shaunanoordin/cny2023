@@ -26,19 +26,6 @@ export default class Rabbit extends Entity {
   }
 
   /*
-  Section: Gameplay Logic
-  ----------------------------------------------------------------------------
-   */
-
-  onCollision (target, collisionCorrection) {
-    super.onCollision(target, collisionCorrection)
-
-    if (target._type === 'bounce-pad') {
-      this.pushY = this.pushY * 2
-    }
-  }
-
-  /*
   Section: Animation
   ----------------------------------------------------------------------------
    */
