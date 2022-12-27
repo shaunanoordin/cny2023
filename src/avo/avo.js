@@ -30,6 +30,8 @@ export default class AvO {
       buttonHome: document.getElementById('button-home'),
       buttonFullscreen: document.getElementById('button-fullscreen'),
       buttonReload: document.getElementById('button-reload'),
+      buttonArrowLeft: document.getElementById('button-arrow-left'),  // CNY2023
+      buttonArrowRight: document.getElementById('button-arrow-right'),  // CNY2023
     }
 
     this.homeMenu = false
@@ -79,6 +81,10 @@ export default class AvO {
       // Keys that are currently being pressed.
       // keysPressed = { key: { duration, acknowledged } }
       keysPressed: {},
+
+      // CNY2023
+      buttonArrowLeftPressed: false,
+      buttonArrowRightPressed: false,
     }
 
     this.prevTime = null
@@ -294,6 +300,30 @@ export default class AvO {
     this.updateUI()
     this.hideUI()  // Hide until all assets are ready
 
+    // CNY2023
+    // --------
+    if (window.PointerEvent) {
+      this.html.buttonArrowLeft.addEventListener('pointerdown', this.buttonArrowLeft_onDown.bind(this))
+      this.html.buttonArrowLeft.addEventListener('pointerup', this.buttonArrowLeft_onUp.bind(this))
+      this.html.buttonArrowRight.addEventListener('pointerdown', this.buttonArrowRight_onDown.bind(this))
+      this.html.buttonArrowRight.addEventListener('pointerup', this.buttonArrowRight_onUp.bind(this))
+    } else {
+      this.html.buttonArrowLeft.addEventListener('mousedown', this.buttonArrowLeft_onDown.bind(this))
+      this.html.buttonArrowLeft.addEventListener('mouseup', this.buttonArrowLeft_onUp.bind(this))
+      this.html.buttonArrowRight.addEventListener('mousedown', this.buttonArrowRight_onDown.bind(this))
+      this.html.buttonArrowRight.addEventListener('mouseup', this.buttonArrowRight_onUp.bind(this))
+    }
+
+    this.html.buttonArrowLeft.addEventListener('touchstart', stopEvent)
+    this.html.buttonArrowLeft.addEventListener('touchmove', stopEvent)
+    this.html.buttonArrowLeft.addEventListener('touchend', stopEvent)
+    this.html.buttonArrowLeft.addEventListener('touchcancel', stopEvent)
+    this.html.buttonArrowRight.addEventListener('touchstart', stopEvent)
+    this.html.buttonArrowRight.addEventListener('touchmove', stopEvent)
+    this.html.buttonArrowRight.addEventListener('touchend', stopEvent)
+    this.html.buttonArrowRight.addEventListener('touchcancel', stopEvent)
+    // --------
+
     this.html.main.focus()
   }
 
@@ -450,6 +480,27 @@ export default class AvO {
 
   buttonReload_onClick () {
     this.levels.reload()
+  }
+
+  // CNY 2023
+  buttonArrowLeft_onDown (e) {
+    this.playerInput.buttonArrowLeftPressed = true
+    return stopEvent(e)
+  }
+
+  buttonArrowLeft_onUp (e) {
+    this.playerInput.buttonArrowLeftPressed = false
+    return stopEvent(e)
+  }
+
+  buttonArrowRight_onDown (e) {
+    this.playerInput.buttonArrowRightPressed = true
+    return stopEvent(e)
+  }
+
+  buttonArrowRight_onUp (e) {
+    this.playerInput.buttonArrowRightPressed = false
+    return stopEvent(e)
   }
 
   /*

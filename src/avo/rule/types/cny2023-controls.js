@@ -56,16 +56,20 @@ export default class CNY2023Controls extends Rule {
   checkUserInput (timeStep) {
     const app = this._app
     const hero = app.hero
-    const keysPressed = app.playerInput.keysPressed
+    const {
+      keysPressed,
+      buttonArrowLeftPressed,
+      buttonArrowRightPressed,
+    } = app.playerInput
     const TIME_MODIFIER = timeStep / EXPECTED_TIMESTEP
 
     if (!hero) return
 
-    if (keysPressed['ArrowLeft']) {
+    if (keysPressed['ArrowLeft'] || buttonArrowLeftPressed) {
       hero.pushX -= SIDE_SPEED / TIME_MODIFIER
     }
 
-    if (keysPressed['ArrowRight']) {
+    if (keysPressed['ArrowRight'] || buttonArrowRightPressed) {
       hero.pushX += SIDE_SPEED / TIME_MODIFIER
     }
 
