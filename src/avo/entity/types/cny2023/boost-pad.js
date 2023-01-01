@@ -28,6 +28,12 @@ export default class BoostPad extends Entity {
   onCollision (target, collisionCorrection) {
     super.onCollision(target, collisionCorrection)
 
-    target.pushY = -this.boostPower
+    const app = this._app
+    const hero = app.hero
+
+    if (target === hero) {
+      target.pushY = -this.boostPower
+      // this._expired = true  // Add this to crank up the difficulty
+    }
   }
 }
