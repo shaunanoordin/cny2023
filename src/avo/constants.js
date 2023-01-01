@@ -65,3 +65,5 @@ export const CNY2023_COLS = 40
 export const CNY2023_ROWS = 16
 export const CNY2023_MAX_HEIGHT = 10000
 export const CNY2023_MIN_HEIGHT = 0
+export const CNY2023_GRAVITY = 0.7
+export const CNY2023_RABBIT_SPEED = 0.5

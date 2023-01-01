@@ -1,8 +1,8 @@
 import Rule from '@avo/rule'
-import { EXPECTED_TIMESTEP, LAYERS, TILE_SIZE } from '@avo/constants'
-
-const GRAVITY = 0.7
-const SIDE_SPEED = 0.5
+import {
+  EXPECTED_TIMESTEP, LAYERS, TILE_SIZE,
+  CNY2023_GRAVITY, CNY2023_RABBIT_SPEED,
+} from '@avo/constants'
 
 export default class CNY2023Controls extends Rule {
   constructor (app) {
@@ -18,7 +18,7 @@ export default class CNY2023Controls extends Rule {
     // Gravity
     entities.forEach(entity => {
       if (entity.movable) {
-        entity.pushY += GRAVITY / TIME_MODIFIER
+        entity.pushY += CNY2023_GRAVITY / TIME_MODIFIER
       }
     })
 
@@ -67,15 +67,11 @@ export default class CNY2023Controls extends Rule {
     if (!hero) return
 
     if (keysPressed['ArrowLeft'] || buttonArrowLeftPressed) {
-      hero.pushX -= SIDE_SPEED / TIME_MODIFIER
+      hero.pushX -= CNY2023_RABBIT_SPEED / TIME_MODIFIER
     }
 
     if (keysPressed['ArrowRight'] || buttonArrowRightPressed) {
-      hero.pushX += SIDE_SPEED / TIME_MODIFIER
-    }
-
-    if (keysPressed['ArrowUp']) {
-        hero.pushY = -20
+      hero.pushX += CNY2023_RABBIT_SPEED / TIME_MODIFIER
     }
   }
 
@@ -83,7 +79,6 @@ export default class CNY2023Controls extends Rule {
     const app = this._app
     const hero = app.hero
     const camera = app.camera
-    console.log('xxx')
 
     if (hero) {
       camera.x =  (camera.zoom <= 1)

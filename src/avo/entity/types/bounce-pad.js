@@ -23,7 +23,7 @@ export default class BouncePad extends Entity {
 
   onCollision (target, collisionCorrection) {
     super.onCollision(target, collisionCorrection)
-    
+
     target.pushX = target.pushX * 2
     target.pushY = target.pushY * 2
   }
