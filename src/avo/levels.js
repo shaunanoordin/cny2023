@@ -4,11 +4,9 @@ import {
   TILE_SIZE
 } from '@avo/constants'
 
-import Rabbit from '@avo/entity/types/rabbit'
-// import Wall from '@avo/entity/types/wall'
-// import BouncePad from '@avo/entity/types/bounce-pad'
-import Ground from '@avo/entity/types/ground'
-import BoostPad from '@avo/entity/types/boost-pad'
+import Rabbit from '@avo/entity/types/cny2023/rabbit'
+import Ground from '@avo/entity/types/cny2023/ground'
+import BoostPad from '@avo/entity/types/cny2023/boost-pad'
 
 import CNY2023Controls from '@avo/rule/types/cny2023-controls'
 import CNY2023Goals from '@avo/rule/types/cny2023-goals'
