@@ -2,13 +2,14 @@ import Rule from '@avo/rule'
 import {
   EXPECTED_TIMESTEP, LAYERS, TILE_SIZE,
   CNY2023_GRAVITY, CNY2023_RABBIT_SPEED,
-  CNY2023_COLS
+  CNY2023_COLS, CNY2023_ROWS
 } from '@avo/constants'
 
 const MIN_X = 0
 const MAX_X = CNY2023_COLS * TILE_SIZE
 const MIN_RABBIT_X = MIN_X + TILE_SIZE
 const MAX_RABBIT_X = MAX_X - TILE_SIZE
+const FLOOR_HEIGHT_OFFSET = (CNY2023_ROWS - 1.5) * TILE_SIZE
 
 export default class CNY2023Controls extends Rule {
   constructor (app) {
@@ -50,14 +51,17 @@ export default class CNY2023Controls extends Rule {
       c2d.textBaseline = 'bottom'
       c2d.lineWidth = 8
 
-      let text = `pushY: ${hero?.pushY.toFixed(2)}`
+      const jumpHeight = (hero)
+        ? FLOOR_HEIGHT_OFFSET - hero.y
+        : 0
+      const jumpHeightInMetres = jumpHeight / TILE_SIZE
+      let text = `${(jumpHeightInMetres).toFixed(0)}m`
       c2d.textAlign = 'right'
       c2d.strokeStyle = '#fff'
       c2d.strokeText(text, RIGHT, BOTTOM)
       c2d.fillStyle = '#c44'
       c2d.fillText(text, RIGHT, BOTTOM)
       // ----------------
-
     }
   }
 
