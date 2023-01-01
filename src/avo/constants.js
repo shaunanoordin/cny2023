@@ -59,3 +59,9 @@ e.g. we can say that we expect an object with "movement speed" of "2" to travel
  */
 export const EXPECTED_FRAMES_PER_SECOND = 60
 export const EXPECTED_TIMESTEP = 1000 / EXPECTED_FRAMES_PER_SECOND
+
+// CNY2023
+export const CNY2023_COLS = 40
+export const CNY2023_ROWS = 16
+export const CNY2023_MAX_HEIGHT = 10000
+export const CNY2023_MIN_HEIGHT = 0

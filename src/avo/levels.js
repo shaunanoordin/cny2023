@@ -1,4 +1,8 @@
-import { PLAYER_ACTIONS, DIRECTIONS, TILE_SIZE } from '@avo/constants'
+import {
+  PLAYER_ACTIONS, DIRECTIONS,
+  CNY2023_COLS, CNY2023_ROWS,
+  TILE_SIZE
+} from '@avo/constants'
 
 import Rabbit from '@avo/entity/types/rabbit'
 import Wall from '@avo/entity/types/wall'
@@ -43,18 +47,19 @@ export default class Levels {
   generate_default () {
     const app = this._app
 
-    app.hero = app.addEntity(new Rabbit(app, 11.5, 1))
+    app.hero = app.addEntity(new Rabbit(app, (CNY2023_COLS-1) / 2, 1))
     app.camera.x = 0
     app.camera.y = 0
     //app.camera.target = app.hero
 
     app.addRule(new CNY2023Controls(app))
 
-    app.addEntity(new Wall(app, 0, 0, 1, 16))  // West Wall
-    app.addEntity(new Wall(app, 23, 0, 1, 16))  // East Wall
-    app.addEntity(new Wall(app, 1, 0, 22, 1))  // North Wall
-    app.addEntity(new Wall(app, 1, 15, 22, 1))  // South Wall
+    // app.addEntity(new Wall(app, 0, 0, 1, 16))  // West Wall
+    // app.addEntity(new Wall(app, 23, 0, 1, 16))  // East Wall
+    // app.addEntity(new Wall(app, 1, 0, 22, 1))  // North Wall
+    app.addEntity(new Wall(app, 0, CNY2023_ROWS - 1, CNY2023_COLS, 1))  // South Wall
 
-    app.addEntity(new BouncePad(app, 10, 14, 4, 1))  // Bouncepad
+    const bouncePadWidth = 10
+    app.addEntity(new BouncePad(app, (CNY2023_COLS - bouncePadWidth) / 2, CNY2023_ROWS - 2, bouncePadWidth, 1))  // Bouncepad
   }
 }

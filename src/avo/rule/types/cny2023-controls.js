@@ -23,6 +23,7 @@ export default class CNY2023Controls extends Rule {
     })
 
     this.checkUserInput(timeStep)
+    this.focusCamera()
   }
 
   paint (layer = 0) {
@@ -75,6 +76,20 @@ export default class CNY2023Controls extends Rule {
 
     if (keysPressed['ArrowUp']) {
         hero.pushY = -20
+    }
+  }
+
+  focusCamera () {
+    const app = this._app
+    const hero = app.hero
+    const camera = app.camera
+    console.log('xxx')
+
+    if (hero) {
+      camera.x =  (camera.zoom <= 1)
+        ? app.canvasWidth / 2 - (app.canvasWidth / 2) * camera.zoom
+        : app.canvasWidth / 2 - hero.x * camera.zoom
+      camera.y = app.canvasHeight / 2 - hero.y * camera.zoom
     }
   }
 }
