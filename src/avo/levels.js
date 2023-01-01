@@ -5,14 +5,20 @@ import {
 } from '@avo/constants'
 
 import Rabbit from '@avo/entity/types/rabbit'
-import Wall from '@avo/entity/types/wall'
+// import Wall from '@avo/entity/types/wall'
 // import BouncePad from '@avo/entity/types/bounce-pad'
+import Ground from '@avo/entity/types/ground'
 import BoostPad from '@avo/entity/types/boost-pad'
 
 import CNY2023Controls from '@avo/rule/types/cny2023-controls'
+import CNY2023Goals from '@avo/rule/types/cny2023-goals'
 
 const MIN_X = 0
 const MAX_X = CNY2023_ROWS * TILE_SIZE
+const ROWS_BETWEEN_BOOSTSPADS = 8
+
+export const CNY2023_CEILING_Y = -100 * TILE_SIZE
+export const CNY2023_FLOOR_Y = CNY2023_ROWS * TILE_SIZE
 
 export default class Levels {
   constructor (app) {
@@ -57,16 +63,18 @@ export default class Levels {
     //app.camera.target = app.hero
 
     app.addRule(new CNY2023Controls(app))
+    app.addRule(new CNY2023Goals(app))
 
     // app.addEntity(new Wall(app, 0, 0, 1, 16))  // West Wall
     // app.addEntity(new Wall(app, 23, 0, 1, 16))  // East Wall
     // app.addEntity(new Wall(app, 1, 0, 22, 1))  // North Wall
-    app.addEntity(new Wall(app, 0, CNY2023_ROWS - 1, CNY2023_COLS, 1))  // South Wall
+    // app.addEntity(new Wall(app, 0, CNY2023_ROWS - 1, CNY2023_COLS, 1))  // South Wall
+    app.addEntity(new Ground(app, 0, CNY2023_ROWS - 1, CNY2023_COLS, 1))  // South Wall
 
     const boostPadWidth = 10
     app.addEntity(new BoostPad(app, (CNY2023_COLS - boostPadWidth) / 2, CNY2023_ROWS - 2, boostPadWidth, 1))  // Boostpad
 
-    for (let y = TILE_SIZE * 4 ; y > -1000 ; y -= (TILE_SIZE* 8)) {
+    for (let y = TILE_SIZE * 4 ; y >= CNY2023_CEILING_Y ; y -= (TILE_SIZE * ROWS_BETWEEN_BOOSTSPADS)) {
       this.createBoucePad(y)
       console.log(y)
     }

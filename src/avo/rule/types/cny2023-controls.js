@@ -10,6 +10,7 @@ const MAX_X = CNY2023_COLS * TILE_SIZE
 const MIN_RABBIT_X = MIN_X + TILE_SIZE
 const MAX_RABBIT_X = MAX_X - TILE_SIZE
 const FLOOR_HEIGHT_OFFSET = (CNY2023_ROWS - 1.5) * TILE_SIZE
+const MAX_Y = CNY2023_ROWS * TILE_SIZE
 
 export default class CNY2023Controls extends Rule {
   constructor (app) {
@@ -30,7 +31,7 @@ export default class CNY2023Controls extends Rule {
     })
 
     this.checkUserInput(timeStep)
-    this.constrainRabbitPosition()
+    this.checkRabbitPosition()
     this.focusCamera()
   }
 
@@ -102,11 +103,15 @@ export default class CNY2023Controls extends Rule {
     }
   }
 
-  constrainRabbitPosition () {
-    const hero = this._app.hero
-    if (!hero) return
+  checkRabbitPosition () {
+    const app = this._app
+    const hero = app.hero
+    const goals = app.rules['cny2023-goals']
+    if (!hero || !goals) return
 
     hero.x = Math.max(hero.x, MIN_RABBIT_X)
     hero.x = Math.min(hero.x, MAX_RABBIT_X)
+
+    if (hero.y > MAX_Y) goals.triggerLoseScreen()
   }
 }
