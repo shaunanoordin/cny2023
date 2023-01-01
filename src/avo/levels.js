@@ -6,7 +6,8 @@ import {
 
 import Rabbit from '@avo/entity/types/rabbit'
 import Wall from '@avo/entity/types/wall'
-import BouncePad from '@avo/entity/types/bounce-pad'
+// import BouncePad from '@avo/entity/types/bounce-pad'
+import BoostPad from '@avo/entity/types/boost-pad'
 
 import CNY2023Controls from '@avo/rule/types/cny2023-controls'
 
@@ -62,8 +63,8 @@ export default class Levels {
     // app.addEntity(new Wall(app, 1, 0, 22, 1))  // North Wall
     app.addEntity(new Wall(app, 0, CNY2023_ROWS - 1, CNY2023_COLS, 1))  // South Wall
 
-    const bouncePadWidth = 10
-    app.addEntity(new BouncePad(app, (CNY2023_COLS - bouncePadWidth) / 2, CNY2023_ROWS - 2, bouncePadWidth, 1))  // Bouncepad
+    const boostPadWidth = 10
+    app.addEntity(new BoostPad(app, (CNY2023_COLS - boostPadWidth) / 2, CNY2023_ROWS - 2, boostPadWidth, 1))  // Boostpad
 
     for (let y = TILE_SIZE * 4 ; y > -1000 ; y -= (TILE_SIZE* 8)) {
       this.createBoucePad(y)
@@ -80,6 +81,6 @@ export default class Levels {
     const row = y / TILE_SIZE
     const col = x / TILE_SIZE
 
-    app.addEntity(new BouncePad(app, col, row, width, height))
+    app.addEntity(new BoostPad(app, col, row, width, height))
   }
 }
