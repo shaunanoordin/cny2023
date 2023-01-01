@@ -1,13 +1,15 @@
 import Entity from '@avo/entity'
 import { SHAPES, TILE_SIZE } from '@avo/constants'
 
-export default class BouncePad extends Entity {
-  constructor (app, col = 0, row = 0, width = 1, height = 1, cutCorner = false) {
-    super(app)
-    this._type = 'bounce-pad'
+const DEFAULT_BOOST_POWER = 32
 
-    this.colour = '#c08040'
-    this.solid = true
+export default class BoostPad extends Entity {
+  constructor (app, col = 0, row = 0, width = 1, height = 1, cutCorner = false, boostPower = DEFAULT_BOOST_POWER) {
+    super(app)
+    this._type = 'boost-pad'
+
+    this.colour = '#c0a040'
+    this.solid = false
     this.movable = false
     this.x = col * TILE_SIZE
     this.y = row * TILE_SIZE
@@ -19,12 +21,19 @@ export default class BouncePad extends Entity {
     if (cutCorner !== 'ne') this.shapePolygonPath.push(width * TILE_SIZE, 0)
     if (cutCorner !== 'se') this.shapePolygonPath.push(width * TILE_SIZE, height * TILE_SIZE)
     if (cutCorner !== 'sw') this.shapePolygonPath.push(0, height * TILE_SIZE)
+
+    this.boostPower = boostPower
   }
 
   onCollision (target, collisionCorrection) {
     super.onCollision(target, collisionCorrection)
-    
-    target.pushX = target.pushX * 2
-    target.pushY = target.pushY * 2
+
+    const app = this._app
+    const hero = app.hero
+
+    if (target === hero) {
+      target.pushY = -this.boostPower
+      // this._expired = true  // Add this to crank up the difficulty
+    }
   }
 }

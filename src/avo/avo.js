@@ -1,4 +1,5 @@
 import {
+  CNY2023_COLS, CNY2023_ROWS,
   TILE_SIZE,
   PLAYER_ACTIONS,
   MIN_LAYER, MAX_LAYER,
@@ -18,8 +19,8 @@ const STARTING_LEVEL = (Number.isInteger(parseInt(searchParams.get('level'))))
 export default class AvO {
   constructor (args = {}) {
     const {
-      width = 24 * TILE_SIZE,  // Canvas width
-      height = 16 * TILE_SIZE,  // Canvas height
+      width = CNY2023_COLS * TILE_SIZE,  // Canvas width
+      height = CNY2023_ROWS * TILE_SIZE,  // Canvas height
     } = args
 
     this.html = {

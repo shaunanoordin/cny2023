@@ -1,8 +1,16 @@
 import Rule from '@avo/rule'
-import { EXPECTED_TIMESTEP, LAYERS, TILE_SIZE } from '@avo/constants'
+import {
+  EXPECTED_TIMESTEP, LAYERS, TILE_SIZE,
+  CNY2023_GRAVITY, CNY2023_RABBIT_SPEED,
+  CNY2023_COLS, CNY2023_ROWS
+} from '@avo/constants'
 
-const GRAVITY = 0.7
-const SIDE_SPEED = 0.5
+const MIN_X = 0
+const MAX_X = CNY2023_COLS * TILE_SIZE
+const MIN_RABBIT_X = MIN_X + TILE_SIZE
+const MAX_RABBIT_X = MAX_X - TILE_SIZE
+const FLOOR_HEIGHT_OFFSET = (CNY2023_ROWS - 1.5) * TILE_SIZE
+const MAX_Y = CNY2023_ROWS * TILE_SIZE
 
 export default class CNY2023Controls extends Rule {
   constructor (app) {
@@ -18,11 +26,13 @@ export default class CNY2023Controls extends Rule {
     // Gravity
     entities.forEach(entity => {
       if (entity.movable) {
-        entity.pushY += GRAVITY / TIME_MODIFIER
+        entity.pushY += CNY2023_GRAVITY / TIME_MODIFIER
       }
     })
 
     this.checkUserInput(timeStep)
+    this.checkRabbitPosition()
+    this.focusCamera()
   }
 
   paint (layer = 0) {
@@ -42,14 +52,17 @@ export default class CNY2023Controls extends Rule {
       c2d.textBaseline = 'bottom'
       c2d.lineWidth = 8
 
-      let text = `pushY: ${hero?.pushY.toFixed(2)}`
+      const jumpHeight = (hero)
+        ? FLOOR_HEIGHT_OFFSET - hero.y
+        : 0
+      const jumpHeightInMetres = jumpHeight / TILE_SIZE
+      let text = `${(jumpHeightInMetres).toFixed(0)}m`
       c2d.textAlign = 'right'
       c2d.strokeStyle = '#fff'
       c2d.strokeText(text, RIGHT, BOTTOM)
       c2d.fillStyle = '#c44'
       c2d.fillText(text, RIGHT, BOTTOM)
       // ----------------
-
     }
   }
 
@@ -66,15 +79,39 @@ export default class CNY2023Controls extends Rule {
     if (!hero) return
 
     if (keysPressed['ArrowLeft'] || buttonArrowLeftPressed) {
-      hero.pushX -= SIDE_SPEED / TIME_MODIFIER
+      hero.pushX -= CNY2023_RABBIT_SPEED / TIME_MODIFIER
     }
 
     if (keysPressed['ArrowRight'] || buttonArrowRightPressed) {
-      hero.pushX += SIDE_SPEED / TIME_MODIFIER
+      hero.pushX += CNY2023_RABBIT_SPEED / TIME_MODIFIER
     }
+  }
 
-    if (keysPressed['ArrowUp']) {
-        hero.pushY = -20
+  focusCamera () {
+    const app = this._app
+    const hero = app.hero
+    const camera = app.camera
+
+    if (hero) {
+      camera.x =  (camera.zoom <= 1)
+        ? app.canvasWidth / 2 - (app.canvasWidth / 2) * camera.zoom
+        : app.canvasWidth / 2 - hero.x * camera.zoom
+      camera.y = app.canvasHeight / 2 - hero.y * camera.zoom
+
+      // Clamp to viewable space
+      camera.y = Math.max(camera.y, 0)
     }
+  }
+
+  checkRabbitPosition () {
+    const app = this._app
+    const hero = app.hero
+    const goals = app.rules['cny2023-goals']
+    if (!hero || !goals) return
+
+    hero.x = Math.max(hero.x, MIN_RABBIT_X)
+    hero.x = Math.min(hero.x, MAX_RABBIT_X)
+
+    if (hero.y > MAX_Y) goals.triggerLoseScreen()
   }
 }
