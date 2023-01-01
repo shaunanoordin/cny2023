@@ -10,6 +10,9 @@ import BouncePad from '@avo/entity/types/bounce-pad'
 
 import CNY2023Controls from '@avo/rule/types/cny2023-controls'
 
+const MIN_X = 0
+const MAX_X = CNY2023_ROWS * TILE_SIZE
+
 export default class Levels {
   constructor (app) {
     this._app = app
@@ -61,5 +64,22 @@ export default class Levels {
 
     const bouncePadWidth = 10
     app.addEntity(new BouncePad(app, (CNY2023_COLS - bouncePadWidth) / 2, CNY2023_ROWS - 2, bouncePadWidth, 1))  // Bouncepad
+
+    for (let y = TILE_SIZE * 4 ; y > -1000 ; y -= (TILE_SIZE* 8)) {
+      this.createBoucePad(y)
+      console.log(y)
+    }
+  }
+
+  createBoucePad (y = 0) {
+    const app = this._app
+
+    const width = Math.random() * 8 + 2
+    const height = 1
+    const x = Math.random() * (MAX_X - MIN_X - width)
+    const row = y / TILE_SIZE
+    const col = x / TILE_SIZE
+
+    app.addEntity(new BouncePad(app, col, row, width, height))
   }
 }
