@@ -103,12 +103,11 @@ export default class Levels {
   createCoin (y = 0) {
     const app = this._app
 
+    const BUFFER = TILE_SIZE * 2
     const width = Math.floor(Math.random() * 10) + 2
     const height = 1
-    const x = Math.random() * (MAX_X - MIN_X) + MIN_X
-    const row = y / TILE_SIZE
-    const col = x / TILE_SIZE
+    const x = Math.random() * (MAX_X - MIN_X - BUFFER * 2) + MIN_X + BUFFER
 
-    app.addEntity(new Coin(app, col, row))
+    app.addEntity(new Coin(app, x, y))
   }
 }

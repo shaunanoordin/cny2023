@@ -9,14 +9,14 @@ const SPIN_MAX = 1000
 Coins, when picked up by the Cat, increase the player's score.
  */
 export default class Coin extends Entity {
-  constructor (app, col = 0, row = 0) {
+  constructor (app, x = 0, y = 0) {
     super(app)
     this._type = 'cny2023-coin'
 
     this.size = TILE_SIZE
     this.colour = 'rgba(128, 92, 0, 0.5)'
-    this.x = col * TILE_SIZE + TILE_SIZE / 2
-    this.y = row * TILE_SIZE + TILE_SIZE / 2
+    this.x = x
+    this.y = y
 
     this.solid = false
     this.movable = false
