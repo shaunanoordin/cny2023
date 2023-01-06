@@ -16,7 +16,7 @@ import CNY2023Goals from '@avo/rule/types/cny2023-goals'
 const MIN_X = 0
 const MAX_X = CNY2023_COLS * TILE_SIZE
 const ROWS_BETWEEN_BOOSTSPADS = 8
-const DEFAULT_BOOST_PAD_WIDTH = 8 * TILE_SIZE
+const FIRST_BOOST_PAD_WIDTH = 8 * TILE_SIZE
 
 export const CNY2023_CEILING_ROW = -100
 export const CNY2023_CEILING_Y = CNY2023_CEILING_ROW * TILE_SIZE
@@ -26,6 +26,7 @@ export default class Levels {
   constructor (app) {
     this._app = app
     this.current = 0
+    this.firstBoostPad = undefined  // CNY2023
   }
 
   reset () {
@@ -39,6 +40,8 @@ export default class Levels {
     app.camera.zoom = 1
     app.playerAction = PLAYER_ACTIONS.IDLE
     app.setInteractionMenu(false)
+
+    this.firstBoostPad = undefined
   }
 
   load (level = 0) {
@@ -75,11 +78,11 @@ export default class Levels {
     app.addEntity(new Ground(app, 0, CNY2023_ROWS - 1, CNY2023_COLS, 1))
 
     // Main boost pad
-    app.addEntity(new BoostPad(
+    this.firstBoostPad = app.addEntity(new BoostPad(
       app,
       CNY2023_COLS / 2 * TILE_SIZE,  // Middle
       (CNY2023_ROWS - 1.5) * TILE_SIZE,
-      DEFAULT_BOOST_PAD_WIDTH,
+      FIRST_BOOST_PAD_WIDTH,
       TILE_SIZE
     ))
 
@@ -98,13 +101,24 @@ export default class Levels {
     const app = this._app
 
     const BUFFER = TILE_SIZE * 2
-    const width = (Math.random() * 10 + 2) * TILE_SIZE
+    const width = (Math.random() * 6 + 6) * TILE_SIZE
     const height = TILE_SIZE
     const x = Math.random() * (MAX_X - MIN_X - BUFFER * 2) + MIN_X + BUFFER
     const row = y / TILE_SIZE
     const col = x / TILE_SIZE
 
-    app.addEntity(new BoostPad(app, x, y, width, height))
+    const boostPad = app.addEntity(new BoostPad(app, x, y, width, height))
+    const firstPad = this.firstBoostPad
+
+    // Make sure the bottom few boost pads don't block the space directly above
+    // the first/initial boost pad.
+    if (y >= 0) {
+      if (firstPad.left < boostPad.right && boostPad.right < firstPad.right) {
+        boostPad.right = this.firstBoostPad.left
+      } else if (firstPad.left < boostPad.left && boostPad.left < firstPad.right) {
+        boostPad.left = this.firstBoostPad.right
+      }
+    }
   }
 
   createCoin (y = 0) {
