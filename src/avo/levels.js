@@ -16,6 +16,7 @@ import CNY2023Goals from '@avo/rule/types/cny2023-goals'
 const MIN_X = 0
 const MAX_X = CNY2023_COLS * TILE_SIZE
 const ROWS_BETWEEN_BOOSTSPADS = 8
+const DEFAULT_BOOST_PAD_WIDTH = 8 * TILE_SIZE
 
 export const CNY2023_CEILING_ROW = -100
 export const CNY2023_CEILING_Y = CNY2023_CEILING_ROW * TILE_SIZE
@@ -73,13 +74,18 @@ export default class Levels {
     // Ground
     app.addEntity(new Ground(app, 0, CNY2023_ROWS - 1, CNY2023_COLS, 1))
 
-    // Main bounce pad
-    const boostPadWidth = 10
-    app.addEntity(new BoostPad(app, (CNY2023_COLS - boostPadWidth) / 2, CNY2023_ROWS - 2, boostPadWidth, 1))  // Boostpad
+    // Main boost pad
+    app.addEntity(new BoostPad(
+      app,
+      CNY2023_COLS / 2 * TILE_SIZE,  // Middle
+      (CNY2023_ROWS - 1.5) * TILE_SIZE,
+      DEFAULT_BOOST_PAD_WIDTH,
+      TILE_SIZE
+    ))
 
     // Bounce pads
     for (let y = TILE_SIZE * 4 ; y >= CNY2023_CEILING_Y ; y -= (TILE_SIZE * ROWS_BETWEEN_BOOSTSPADS)) {
-      this.createBoucePad(y)
+      this.createBoostPad(y)
     }
 
     // Coins
@@ -88,24 +94,23 @@ export default class Levels {
     }
   }
 
-  createBoucePad (y = 0) {
+  createBoostPad (y = 0) {
     const app = this._app
 
-    const width = Math.floor(Math.random() * 10) + 2
-    const height = 1
-    const x = Math.random() * (MAX_X - MIN_X - width) + MIN_X
+    const BUFFER = TILE_SIZE * 2
+    const width = (Math.random() * 10 + 2) * TILE_SIZE
+    const height = TILE_SIZE
+    const x = Math.random() * (MAX_X - MIN_X - BUFFER * 2) + MIN_X + BUFFER
     const row = y / TILE_SIZE
     const col = x / TILE_SIZE
 
-    app.addEntity(new BoostPad(app, col, row, width, height))
+    app.addEntity(new BoostPad(app, x, y, width, height))
   }
 
   createCoin (y = 0) {
     const app = this._app
 
     const BUFFER = TILE_SIZE * 2
-    const width = Math.floor(Math.random() * 10) + 2
-    const height = 1
     const x = Math.random() * (MAX_X - MIN_X - BUFFER * 2) + MIN_X + BUFFER
 
     app.addEntity(new Coin(app, x, y))
