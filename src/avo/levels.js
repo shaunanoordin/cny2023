@@ -8,12 +8,13 @@ import Rabbit from '@avo/entity/types/cny2023/rabbit'
 import Moon from '@avo/entity/types/cny2023/moon'
 import Ground from '@avo/entity/types/cny2023/ground'
 import BoostPad from '@avo/entity/types/cny2023/boost-pad'
+import Coin from '@avo/entity/types/cny2023/coin'
 
 import CNY2023Controls from '@avo/rule/types/cny2023-controls'
 import CNY2023Goals from '@avo/rule/types/cny2023-goals'
 
 const MIN_X = 0
-const MAX_X = CNY2023_ROWS * TILE_SIZE
+const MAX_X = CNY2023_COLS * TILE_SIZE
 const ROWS_BETWEEN_BOOSTSPADS = 8
 
 export const CNY2023_CEILING_ROW = -100
@@ -72,13 +73,18 @@ export default class Levels {
     // Ground
     app.addEntity(new Ground(app, 0, CNY2023_ROWS - 1, CNY2023_COLS, 1))
 
-    // Main boost pad
+    // Main bounce pad
     const boostPadWidth = 10
     app.addEntity(new BoostPad(app, (CNY2023_COLS - boostPadWidth) / 2, CNY2023_ROWS - 2, boostPadWidth, 1))  // Boostpad
 
+    // Bounce pads
     for (let y = TILE_SIZE * 4 ; y >= CNY2023_CEILING_Y ; y -= (TILE_SIZE * ROWS_BETWEEN_BOOSTSPADS)) {
       this.createBoucePad(y)
-      console.log(y)
+    }
+
+    // Coins
+    for (let y = TILE_SIZE * 4 ; y >= CNY2023_CEILING_Y ; y -= (TILE_SIZE * ROWS_BETWEEN_BOOSTSPADS)) {
+      this.createCoin(y + TILE_SIZE * 2)
     }
   }
 
@@ -87,10 +93,22 @@ export default class Levels {
 
     const width = Math.floor(Math.random() * 10) + 2
     const height = 1
-    const x = Math.random() * (MAX_X - MIN_X - width)
+    const x = Math.random() * (MAX_X - MIN_X - width) + MIN_X
     const row = y / TILE_SIZE
     const col = x / TILE_SIZE
 
     app.addEntity(new BoostPad(app, col, row, width, height))
+  }
+
+  createCoin (y = 0) {
+    const app = this._app
+
+    const width = Math.floor(Math.random() * 10) + 2
+    const height = 1
+    const x = Math.random() * (MAX_X - MIN_X) + MIN_X
+    const row = y / TILE_SIZE
+    const col = x / TILE_SIZE
+
+    app.addEntity(new Coin(app, col, row))
   }
 }
