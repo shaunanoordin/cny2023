@@ -100,7 +100,7 @@ export default class Levels {
   createBoostPad (y = 0) {
     const app = this._app
 
-    const BUFFER = TILE_SIZE * 2
+    const BUFFER = TILE_SIZE * 8
     const width = (Math.random() * 6 + 6) * TILE_SIZE
     const height = TILE_SIZE
     const x = Math.random() * (MAX_X - MIN_X - BUFFER * 2) + MIN_X + BUFFER
