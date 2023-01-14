@@ -9,7 +9,6 @@ const MIN_X = 0
 const MAX_X = CNY2023_COLS * TILE_SIZE
 const MIN_RABBIT_X = MIN_X + TILE_SIZE
 const MAX_RABBIT_X = MAX_X - TILE_SIZE
-const FLOOR_HEIGHT_OFFSET = (CNY2023_ROWS - 1.5) * TILE_SIZE
 const MAX_Y = CNY2023_ROWS * TILE_SIZE
 
 export default class CNY2023Controls extends Rule {
@@ -36,6 +35,7 @@ export default class CNY2023Controls extends Rule {
   }
 
   paint (layer = 0) {
+    /*
     const app = this._app
     const hero = app.hero
     const c2d = app.canvas2d
@@ -64,6 +64,7 @@ export default class CNY2023Controls extends Rule {
       c2d.fillText(text, RIGHT, BOTTOM)
       // ----------------
     }
+    */
   }
 
   checkUserInput (timeStep) {
