@@ -15,6 +15,7 @@ import CNY2023Goals from '@avo/rule/types/cny2023-goals'
 
 const MIN_X = 0
 const MAX_X = CNY2023_COLS * TILE_SIZE
+const MID_X = (MAX_X + MIN_X) / 2
 const ROWS_BETWEEN_BOOSTSPADS = 8
 const FIRST_BOOST_PAD_WIDTH = 8 * TILE_SIZE
 
@@ -87,8 +88,10 @@ export default class Levels {
     ))
 
     // Bounce pads
+    let prevBoostPad = this.firstBoostPad
     for (let y = TILE_SIZE * 4 ; y >= CNY2023_CEILING_Y ; y -= (TILE_SIZE * ROWS_BETWEEN_BOOSTSPADS)) {
-      this.createBoostPad(y)
+      console.log('+++ prevBoostPad', prevBoostPad)
+      prevBoostPad = this.createBoostPad(y, prevBoostPad)
     }
 
     // Coins
@@ -97,15 +100,24 @@ export default class Levels {
     }
   }
 
-  createBoostPad (y = 0) {
+  createBoostPad (y = 0, prevBoostPad = null) {
     const app = this._app
 
     const BUFFER = TILE_SIZE * 8
-    const width = (Math.random() * 6 + 6) * TILE_SIZE
+    const MIN_WIDTH = 6 * TILE_SIZE
+    const MAX_WIDTH = 12 * TILE_SIZE
+    const width = Math.random() * (MAX_WIDTH - MIN_WIDTH) + MIN_WIDTH
     const height = TILE_SIZE
-    const x = Math.random() * (MAX_X - MIN_X - BUFFER * 2) + MIN_X + BUFFER
-    const row = y / TILE_SIZE
-    const col = x / TILE_SIZE
+
+    // Try to place the new boost pad a small distance away from the previous one
+    const MIN_DIST = 2 * TILE_SIZE
+    const MAX_DIST = 8 * TILE_SIZE
+    const distFromPrev = Math.random() * (MAX_DIST - MIN_DIST) + MIN_DIST
+    const leftOrRight = (Math.random() < 0.5) ? -1 : 1
+
+    let x = (prevBoostPad) ? prevBoostPad.x : MID_X
+    x = x + distFromPrev * leftOrRight
+    x = Math.min(Math.max(x, MIN_X), MAX_X)
 
     const boostPad = app.addEntity(new BoostPad(app, x, y, width, height))
     const firstPad = this.firstBoostPad
@@ -113,12 +125,20 @@ export default class Levels {
     // Make sure the bottom few boost pads don't block the space directly above
     // the first/initial boost pad.
     if (y >= 0) {
-      if (firstPad.left < boostPad.right && boostPad.right < firstPad.right) {
+      if (
+        (firstPad.left < boostPad.right && boostPad.right < firstPad.right) ||
+        (firstPad.left < boostPad.x && boostPad.x < firstPad.right)
+      ) {
         boostPad.right = this.firstBoostPad.left
-      } else if (firstPad.left < boostPad.left && boostPad.left < firstPad.right) {
+      } else if (
+        (firstPad.left < boostPad.left && boostPad.left < firstPad.right) ||
+        (firstPad.left < boostPad.x && boostPad.x < firstPad.right)
+      ) {
         boostPad.left = this.firstBoostPad.right
       }
     }
+
+    return boostPad
   }
 
   createCoin (y = 0) {
