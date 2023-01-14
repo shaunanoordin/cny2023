@@ -1,5 +1,5 @@
 import Rule from '@avo/rule'
-import { CNY2023_COLS, CNY2023_ROWS, TILE_SIZE } from '@avo/constants'
+import { CNY2023_COLS, CNY2023_ROWS, LAYERS, TILE_SIZE } from '@avo/constants'
 
 const ANIMATION_MID = 200
 const ANIMATION_MAX = 5000
@@ -36,27 +36,28 @@ export default class CNY2023Goals extends Rule {
   }
 
   paint (layer = 0) {
-    if (!this.win && !this.lose) return
-
     const app = this._app
     const c2d = app.canvas2d
     let imageAsset = undefined
 
+    if (!this.win && !this.lose) return
     if (this.win) imageAsset = app.assets['win']
     if (this.lose) imageAsset = app.assets['lose']
     if (!imageAsset) return
 
-    const progress = Math.min(this.animationCounter / ANIMATION_MID, 1.0)
-    const sizeFactor = progress * 0.6 + 0.2
+    if (layer === LAYERS.HUD) {
+      const progress = Math.min(this.animationCounter / ANIMATION_MID, 1.0)
+      const sizeFactor = progress * 0.6 + 0.2
 
-    const sizeX = IMAGE_WIDTH * sizeFactor
-    const sizeY = IMAGE_HEIGHT * sizeFactor
-    const tgtX = (MAX_X - sizeX) / 2
-    const tgtY = (MAX_Y - sizeY) / 2
+      const sizeX = IMAGE_WIDTH * sizeFactor
+      const sizeY = IMAGE_HEIGHT * sizeFactor
+      const tgtX = (MAX_X - sizeX) / 2
+      const tgtY = (MAX_Y - sizeY) / 2
 
-    c2d.drawImage(imageAsset.img,
-      tgtX, tgtY, sizeX, sizeY
-    )
+      c2d.drawImage(imageAsset.img,
+        tgtX, tgtY, sizeX, sizeY
+      )
+    }
 
   }
 
