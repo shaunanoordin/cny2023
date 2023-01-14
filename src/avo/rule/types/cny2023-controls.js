@@ -35,36 +35,19 @@ export default class CNY2023Controls extends Rule {
   }
 
   paint (layer = 0) {
-    /*
     const app = this._app
     const hero = app.hero
+    const camera = app.camera
     const c2d = app.canvas2d
 
-    if (layer === LAYERS.HUD) {
-      // Draw UI data
-      // ----------------
-      const X_OFFSET = TILE_SIZE * 1.5
-      const Y_OFFSET = TILE_SIZE * -1.0
-      const LEFT = X_OFFSET
-      const RIGHT = app.canvasWidth - X_OFFSET
-      const BOTTOM = app.canvasHeight + Y_OFFSET
-      c2d.font = '2em Source Code Pro'
-      c2d.textBaseline = 'bottom'
-      c2d.lineWidth = 8
+    if (layer === LAYERS.BACKGROUND) {
+      const gradient = c2d.createLinearGradient(0, 0, 0, 640)
+      gradient.addColorStop(0, '#404040')
+      gradient.addColorStop(1, '#6080a0')
 
-      const jumpHeight = (hero)
-        ? FLOOR_HEIGHT_OFFSET - hero.y
-        : 0
-      const jumpHeightInMetres = jumpHeight / TILE_SIZE
-      let text = `${(jumpHeightInMetres).toFixed(0)}m`
-      c2d.textAlign = 'right'
-      c2d.strokeStyle = '#fff'
-      c2d.strokeText(text, RIGHT, BOTTOM)
-      c2d.fillStyle = '#c44'
-      c2d.fillText(text, RIGHT, BOTTOM)
-      // ----------------
+      c2d.fillStyle = gradient;
+      c2d.fillRect(0, 0, 1280, 640);
     }
-    */
   }
 
   checkUserInput (timeStep) {
