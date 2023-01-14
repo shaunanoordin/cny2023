@@ -6,7 +6,7 @@ export default class Ground extends Entity {
     super(app)
     this._type = 'wall'
 
-    this.colour = '#888'
+    this.colour = '#60a080'
     this.solid = true
     this.movable = false
     this.x = col * TILE_SIZE
