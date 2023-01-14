@@ -15,6 +15,8 @@ export default class CNY2023Controls extends Rule {
   constructor (app) {
     super(app)
     this._type = 'cny2023-controls'
+
+    this.stars = this.generateStars()
   }
 
   play (timeStep) {
@@ -41,12 +43,24 @@ export default class CNY2023Controls extends Rule {
     const c2d = app.canvas2d
 
     if (layer === LAYERS.BACKGROUND) {
+      // Paint sky
+      // ----------------
       const gradient = c2d.createLinearGradient(0, 0, 0, 640)
       gradient.addColorStop(0, '#404040')
       gradient.addColorStop(1, '#6080a0')
 
       c2d.fillStyle = gradient;
       c2d.fillRect(0, 0, 1280, 640);
+      // ----------------
+
+      // Paint stars
+      c2d.fillStyle = '#fff'
+      this.stars.forEach(star => {
+        c2d.beginPath()
+        c2d.arc(star.x, star.y, star.size / 2, 0, 2 * Math.PI)
+        c2d.closePath()
+        c2d.fill()
+      })
     }
   }
 
@@ -97,5 +111,17 @@ export default class CNY2023Controls extends Rule {
     hero.x = Math.min(hero.x, MAX_RABBIT_X)
 
     if (hero.y > MAX_Y) goals.triggerLoseScreen()
+  }
+
+  generateStars () {
+    const stars = []
+    const app = this._app
+    for (let i = 0; i < 100 ; i++) {
+      const x = Math.random() * app.canvasWidth
+      const y = (Math.random() * Math.random()) * app.canvasHeight
+      const size = 2
+      stars.push({ x, y, size })
+    }
+    return stars
   }
 }
