@@ -97,7 +97,7 @@ export default class Coin extends Entity {
 
     if (target === hero) {
       this.pickedUp = true
-      goals.score ++
+      goals.increaseScore()
     }
 
   }
