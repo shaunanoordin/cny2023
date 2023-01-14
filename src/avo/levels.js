@@ -90,7 +90,6 @@ export default class Levels {
     // Bounce pads
     let prevBoostPad = this.firstBoostPad
     for (let y = TILE_SIZE * 4 ; y >= CNY2023_CEILING_Y ; y -= (TILE_SIZE * ROWS_BETWEEN_BOOSTSPADS)) {
-      console.log('+++ prevBoostPad', prevBoostPad)
       prevBoostPad = this.createBoostPad(y, prevBoostPad)
     }
 
