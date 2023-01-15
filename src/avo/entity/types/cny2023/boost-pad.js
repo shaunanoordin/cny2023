@@ -34,7 +34,7 @@ export default class BoostPad extends Entity {
     const c2d = this._app.canvas2d
     app.applyCameraTransforms()
 
-    if (layer === LAYERS.ATOMS_UPPER) {
+    if (layer === LAYERS.ENTITIES_UPPER) {
       c2d.fillStyle = '#fff'
       this.paint_circle(0, this.height)
     }

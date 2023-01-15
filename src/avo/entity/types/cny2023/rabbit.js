@@ -33,7 +33,7 @@ export default class Rabbit extends Entity {
     const SPRITE_SIZE = 32
 
     // Draw the sprite
-    if (layer === LAYERS.ATOMS_LOWER) {
+    if (layer === LAYERS.ENTITIES_LOWER) {
       const srcX = this.getSpriteCol() * SPRITE_SIZE
       const srcY = this.getSpriteRow() * SPRITE_SIZE
       const sizeX = SPRITE_SIZE

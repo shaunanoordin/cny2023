@@ -69,7 +69,7 @@ export default class Hero extends Entity {
 
     // Draw any special vfx
     const action = this.action
-    if (action?.name === 'dash' && action?.state === 'execution' && layer === LAYERS.ATOMS_LOWER) {
+    if (action?.name === 'dash' && action?.state === 'execution' && layer === LAYERS.ENTITIES_LOWER) {
       // Draw a "dash line"
       const dashLength = this.size * 2
       const dashWidth = this.size
@@ -84,7 +84,7 @@ export default class Hero extends Entity {
     }
 
     // Draw the sprite
-    if (layer === LAYERS.ATOMS_LOWER) {
+    if (layer === LAYERS.ENTITIES_LOWER) {
       const srcX = this.getSpriteCol() * SPRITE_SIZE
       const srcY = this.getSpriteRow() * SPRITE_SIZE
       const sizeX = SPRITE_SIZE
