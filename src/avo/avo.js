@@ -33,6 +33,7 @@ export default class AvO {
       buttonReload: document.getElementById('button-reload'),
       buttonArrowLeft: document.getElementById('button-arrow-left'),  // CNY2023
       buttonArrowRight: document.getElementById('button-arrow-right'),  // CNY2023
+      buttonPlay: document.getElementById('button-play'),  // CNY2023
     }
 
     this.homeMenu = false
@@ -132,6 +133,7 @@ export default class AvO {
       this.initialised = true
       this.showUI()
       this.levels.load(STARTING_LEVEL)
+      this.setHomeMenu(true)  // CNY2023
     }
   }
 
@@ -207,6 +209,16 @@ export default class AvO {
 
     c2d.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
     c2d.resetTransform()
+
+    if (this.homeMenu) {  // CNY2023: don't paint anything if the home menu is open
+      const gradient = c2d.createLinearGradient(0, 0, 0, this.canvasHeight)
+      gradient.addColorStop(0, '#404040')
+      gradient.addColorStop(1, '#6080a0')
+
+      c2d.fillStyle = gradient
+      c2d.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
+      return
+    }
 
     c2d.strokeStyle = 'rgba(128, 128, 128, 0.05)'
     c2d.lineWidth = 2
@@ -306,6 +318,8 @@ export default class AvO {
 
     // CNY2023
     // --------
+    this.html.buttonPlay.addEventListener('click', this.buttonPlay_onClick.bind(this))
+
     if (window.PointerEvent) {
       this.html.buttonArrowLeft.addEventListener('pointerdown', this.buttonArrowLeft_onDown.bind(this))
       this.html.buttonArrowLeft.addEventListener('pointerup', this.buttonArrowLeft_onUp.bind(this))
@@ -334,11 +348,15 @@ export default class AvO {
   hideUI () {
     this.html.buttonHome.style.visibility = 'hidden'
     this.html.buttonReload.style.visibility = 'hidden'
+    this.html.buttonArrowLeft.style.visibility = 'hidden'
+    this.html.buttonArrowRight.style.visibility = 'hidden'
   }
 
   showUI () {
     this.html.buttonHome.style.visibility = 'visible'
     this.html.buttonReload.style.visibility = 'visible'
+    this.html.buttonArrowLeft.style.visibility = 'visible'
+    this.html.buttonArrowRight.style.visibility = 'visible'
   }
 
   updateUI () {
@@ -362,9 +380,14 @@ export default class AvO {
     if (homeMenu) {
       this.html.homeMenu.style.visibility = 'visible'
       this.html.buttonReload.style.visibility = 'hidden'
+      this.html.buttonArrowLeft.style.visibility = 'hidden'
+      this.html.buttonArrowRight.style.visibility = 'hidden'
+      this.html.buttonPlay.focus()
     } else {
       this.html.homeMenu.style.visibility = 'hidden'
       this.html.buttonReload.style.visibility = 'visible'
+      this.html.buttonArrowLeft.style.visibility = 'visible'
+      this.html.buttonArrowRight.style.visibility = 'visible'
       this.html.main.focus()
     }
   }
@@ -505,6 +528,11 @@ export default class AvO {
   buttonArrowRight_onUp (e) {
     this.playerInput.buttonArrowRightPressed = false
     return stopEvent(e)
+  }
+
+  buttonPlay_onClick (e) {
+    this.setHomeMenu(false)
+    this.levels.load(STARTING_LEVEL)
   }
 
   /*
