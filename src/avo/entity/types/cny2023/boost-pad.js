@@ -1,5 +1,5 @@
 import Entity from '@avo/entity'
-import { SHAPES, TILE_SIZE } from '@avo/constants'
+import { LAYERS, SHAPES, TILE_SIZE } from '@avo/constants'
 
 const DEFAULT_BOOST_POWER = 32
 
@@ -25,6 +25,29 @@ export default class BoostPad extends Entity {
     this.shapePolygonPath.push(width * -0.5, height * -0.5)
 
     this.boostPower = boostPower
+  }
+
+  paint (layer = 0) {
+    super.paint(layer)
+
+    const app = this._app
+    const c2d = this._app.canvas2d
+    app.applyCameraTransforms()
+
+    if (layer === LAYERS.ATOMS_UPPER) {
+      c2d.fillStyle = '#fff'
+      this.paint_circle(0, this.height)
+    }
+
+    app.undoCameraTransforms()
+  }
+
+  paint_circle (offsetX = 0, size = this.height) {
+    const c2d = this._app.canvas2d
+    c2d.beginPath()
+    c2d.arc(this.x + offsetX, this.y, size / 2, 0, 2 * Math.PI)
+    c2d.closePath()
+    c2d.fill()
   }
 
   onCollision (target, collisionCorrection) {
