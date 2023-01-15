@@ -33,6 +33,7 @@ export default class AvO {
       buttonReload: document.getElementById('button-reload'),
       buttonArrowLeft: document.getElementById('button-arrow-left'),  // CNY2023
       buttonArrowRight: document.getElementById('button-arrow-right'),  // CNY2023
+      buttonPlay: document.getElementById('button-play'),  // CNY2023
     }
 
     this.homeMenu = false
@@ -316,6 +317,8 @@ export default class AvO {
 
     // CNY2023
     // --------
+    this.html.buttonPlay.addEventListener('click', this.buttonPlay_onClick.bind(this))
+
     if (window.PointerEvent) {
       this.html.buttonArrowLeft.addEventListener('pointerdown', this.buttonArrowLeft_onDown.bind(this))
       this.html.buttonArrowLeft.addEventListener('pointerup', this.buttonArrowLeft_onUp.bind(this))
@@ -374,6 +377,7 @@ export default class AvO {
       this.html.buttonReload.style.visibility = 'hidden'
       this.html.buttonArrowLeft.style.visibility = 'hidden'
       this.html.buttonArrowRight.style.visibility = 'hidden'
+      this.html.buttonPlay.focus()
     } else {
       this.html.homeMenu.style.visibility = 'hidden'
       this.html.buttonReload.style.visibility = 'visible'
@@ -519,6 +523,11 @@ export default class AvO {
   buttonArrowRight_onUp (e) {
     this.playerInput.buttonArrowRightPressed = false
     return stopEvent(e)
+  }
+
+  buttonPlay_onClick (e) {
+    this.setHomeMenu(false)
+    this.levels.load(STARTING_LEVEL)
   }
 
   /*
