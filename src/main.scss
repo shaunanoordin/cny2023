@@ -197,7 +197,20 @@ table {
     #cny2023-card {
       flex: 1 1 auto;
       display: block;
-      width: 100%;
+      width: 80%;
+      margin: 0 auto;
+    }
+
+    .row {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .col {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
   }
 }

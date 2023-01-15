@@ -164,7 +164,18 @@ table th {
 #app > main #home-menu #cny2023-card {
   flex: 1 1 auto;
   display: block;
-  width: 100%;
+  width: 80%;
+  margin: 0 auto;
+}
+#app > main #home-menu .row {
+  display: flex;
+  flex-direction: row;
+}
+#app > main #home-menu .col {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /*# sourceMappingURL=main.css.map */

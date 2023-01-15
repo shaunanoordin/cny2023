@@ -208,6 +208,16 @@ export default class AvO {
     c2d.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
     c2d.resetTransform()
 
+    if (this.homeMenu) {  // CNY2023: don't paint anything if the home menu is open
+      const gradient = c2d.createLinearGradient(0, 0, 0, this.canvasHeight)
+      gradient.addColorStop(0, '#404040')
+      gradient.addColorStop(1, '#6080a0')
+
+      c2d.fillStyle = gradient
+      c2d.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
+      return
+    }
+
     c2d.strokeStyle = 'rgba(128, 128, 128, 0.05)'
     c2d.lineWidth = 2
     // ----------------
