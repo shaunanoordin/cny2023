@@ -37,7 +37,7 @@ export default class AvO {
     }
 
     this.homeMenu = false
-    this.setHomeMenu(true)
+    this.setHomeMenu(false)
 
     this.interactionMenu = false
     this.setInteractionMenu(false)
@@ -133,6 +133,7 @@ export default class AvO {
       this.initialised = true
       this.showUI()
       this.levels.load(STARTING_LEVEL)
+      this.setHomeMenu(true)  // CNY2023
     }
   }
 
@@ -347,11 +348,15 @@ export default class AvO {
   hideUI () {
     this.html.buttonHome.style.visibility = 'hidden'
     this.html.buttonReload.style.visibility = 'hidden'
+    this.html.buttonArrowLeft.style.visibility = 'hidden'
+    this.html.buttonArrowRight.style.visibility = 'hidden'
   }
 
   showUI () {
     this.html.buttonHome.style.visibility = 'visible'
     this.html.buttonReload.style.visibility = 'visible'
+    this.html.buttonArrowLeft.style.visibility = 'visible'
+    this.html.buttonArrowRight.style.visibility = 'visible'
   }
 
   updateUI () {
