@@ -36,7 +36,7 @@ export default class AvO {
     }
 
     this.homeMenu = false
-    this.setHomeMenu(false)
+    this.setHomeMenu(true)
 
     this.interactionMenu = false
     this.setInteractionMenu(false)
@@ -362,9 +362,13 @@ export default class AvO {
     if (homeMenu) {
       this.html.homeMenu.style.visibility = 'visible'
       this.html.buttonReload.style.visibility = 'hidden'
+      this.html.buttonArrowLeft.style.visibility = 'hidden'
+      this.html.buttonArrowRight.style.visibility = 'hidden'
     } else {
       this.html.homeMenu.style.visibility = 'hidden'
       this.html.buttonReload.style.visibility = 'visible'
+      this.html.buttonArrowLeft.style.visibility = 'visible'
+      this.html.buttonArrowRight.style.visibility = 'visible'
       this.html.main.focus()
     }
   }

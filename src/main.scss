@@ -1,13 +1,13 @@
 $white: #fff;
-$light: #eee;
-$light-grey: #ccc;
-$grey: #888;
-$dark-grey: #666;
-$dark: #444;
+$light: #e0e0e0;
+$light-grey: #c0c0c0;
+$grey: #808080;
+$dark-grey: #606060;
+$dark: #404040;
 $black: #000;
 
-$primary: #c44;
-$primary-highlight: #e66;
+$primary: #c06060;
+$primary-highlight: #e04040;
 
 * {
   box-sizing: border-box;
@@ -160,6 +160,8 @@ table {
     left: 0.5em;
   }
 
+  /* CNY2023 additions */
+
   #button-arrow-left {
     top: 10.5em;
     left: 0.5em;
@@ -172,5 +174,30 @@ table {
     right: 0.5em;
     width: 3em;
     height: 40%;
+  }
+
+  #home-menu {
+    > div {
+      font-family: "Verdana", sans-serif;
+      font-size: 1vw;
+      background: #a06060;
+      color: #fff;
+      padding: 1em 20%;
+    }
+
+    a {
+      color: #e0a0a0;
+      text-decoration: none;
+
+      &:hover {
+        color: #f0a0a0;
+      }
+    }
+
+    #cny2023-card {
+      flex: 1 1 auto;
+      display: block;
+      width: 100%;
+    }
   }
 }
