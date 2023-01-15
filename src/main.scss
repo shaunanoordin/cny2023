@@ -177,12 +177,20 @@ table {
   }
 
   #home-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     > div {
       font-family: "Verdana", sans-serif;
       font-size: 1vw;
       background: #a06060;
       color: #fff;
-      padding: 1em 20%;
+      margin: auto;
+      padding: auto;
+      width: 80%;
+      height: 90%;
+      flex: 0 0 auto;
     }
 
     a {
@@ -197,12 +205,13 @@ table {
     #cny2023-card {
       flex: 1 1 auto;
       display: block;
-      width: 80%;
+      width: 60%;
       margin: 0 auto;
     }
 
     #button-play {
-      padding: 2em;
+      font-size: 1.5vw;
+      padding: 1.5vw;
       animation-name: cny2023-button-glow;
       animation-duration: 5s;
       animation-iteration-count: infinite;
@@ -215,6 +224,8 @@ table {
     }
 
     .row {
+      width: 70%;
+      margin: 0 auto;
       display: flex;
       flex-direction: row-reverse;
     }
@@ -223,6 +234,7 @@ table {
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
+      /* align-items: center; */
       justify-content: center;
     }
   }
