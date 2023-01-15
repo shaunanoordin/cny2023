@@ -44,8 +44,8 @@ information in different visual layers.
  */
 export const LAYERS = {
   BACKGROUND: 0,  // Background layer, mostly for floors.
-  ATOMS_LOWER: 1,  // Main object layer.
-  ATOMS_UPPER: 2,  // Additional object layer (e.g. flying objects)
+  ENTITIES_LOWER: 1,  // Main object layer.
+  ENTITIES_UPPER: 2,  // Additional object layer (e.g. flying objects)
   HUD: 3,
 }
 export const MIN_LAYER = 0

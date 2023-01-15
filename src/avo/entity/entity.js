@@ -79,7 +79,7 @@ export default class Entity {
     const camera = this._app.camera
     this._app.applyCameraTransforms()
 
-    if (layer === LAYERS.ATOMS_LOWER) {
+    if (layer === LAYERS.ENTITIES_LOWER) {
       c2d.fillStyle = this.colour
       c2d.strokeStyle = '#444'
       c2d.lineWidth = this.mass / MASS_TO_LINEWIDTH_RATIO

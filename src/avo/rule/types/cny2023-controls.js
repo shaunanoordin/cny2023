@@ -1,6 +1,6 @@
 import Rule from '@avo/rule'
 import {
-  EXPECTED_TIMESTEP, LAYERS, TILE_SIZE,
+  DIRECTIONS, EXPECTED_TIMESTEP, LAYERS, TILE_SIZE,
   CNY2023_GRAVITY, CNY2023_RABBIT_SPEED,
   CNY2023_COLS, CNY2023_ROWS
 } from '@avo/constants'
@@ -15,6 +15,8 @@ export default class CNY2023Controls extends Rule {
   constructor (app) {
     super(app)
     this._type = 'cny2023-controls'
+
+    this.stars = this.generateStars()
   }
 
   play (timeStep) {
@@ -35,36 +37,31 @@ export default class CNY2023Controls extends Rule {
   }
 
   paint (layer = 0) {
-    /*
     const app = this._app
     const hero = app.hero
+    const camera = app.camera
     const c2d = app.canvas2d
 
-    if (layer === LAYERS.HUD) {
-      // Draw UI data
+    if (layer === LAYERS.BACKGROUND) {
+      // Paint sky
       // ----------------
-      const X_OFFSET = TILE_SIZE * 1.5
-      const Y_OFFSET = TILE_SIZE * -1.0
-      const LEFT = X_OFFSET
-      const RIGHT = app.canvasWidth - X_OFFSET
-      const BOTTOM = app.canvasHeight + Y_OFFSET
-      c2d.font = '2em Source Code Pro'
-      c2d.textBaseline = 'bottom'
-      c2d.lineWidth = 8
+      const gradient = c2d.createLinearGradient(0, 0, 0, 640)
+      gradient.addColorStop(0, '#404040')
+      gradient.addColorStop(1, '#6080a0')
 
-      const jumpHeight = (hero)
-        ? FLOOR_HEIGHT_OFFSET - hero.y
-        : 0
-      const jumpHeightInMetres = jumpHeight / TILE_SIZE
-      let text = `${(jumpHeightInMetres).toFixed(0)}m`
-      c2d.textAlign = 'right'
-      c2d.strokeStyle = '#fff'
-      c2d.strokeText(text, RIGHT, BOTTOM)
-      c2d.fillStyle = '#c44'
-      c2d.fillText(text, RIGHT, BOTTOM)
+      c2d.fillStyle = gradient
+      c2d.fillRect(0, 0, 1280, 640)
       // ----------------
+
+      // Paint stars
+      c2d.fillStyle = '#fff'
+      this.stars.forEach(star => {
+        c2d.beginPath()
+        c2d.arc(star.x, star.y, star.size / 2, 0, 2 * Math.PI)
+        c2d.closePath()
+        c2d.fill()
+      })
     }
-    */
   }
 
   checkUserInput (timeStep) {
@@ -81,10 +78,12 @@ export default class CNY2023Controls extends Rule {
 
     if (keysPressed['ArrowLeft'] || buttonArrowLeftPressed) {
       hero.pushX -= CNY2023_RABBIT_SPEED / TIME_MODIFIER
+      hero.direction = DIRECTIONS.WEST
     }
 
     if (keysPressed['ArrowRight'] || buttonArrowRightPressed) {
       hero.pushX += CNY2023_RABBIT_SPEED / TIME_MODIFIER
+      hero.direction = DIRECTIONS.EAST
     }
   }
 
@@ -114,5 +113,17 @@ export default class CNY2023Controls extends Rule {
     hero.x = Math.min(hero.x, MAX_RABBIT_X)
 
     if (hero.y > MAX_Y) goals.triggerLoseScreen()
+  }
+
+  generateStars () {
+    const stars = []
+    const app = this._app
+    for (let i = 0; i < 100 ; i++) {
+      const x = Math.random() * app.canvasWidth
+      const y = (Math.random() * Math.random()) * app.canvasHeight
+      const size = 2
+      stars.push({ x, y, size })
+    }
+    return stars
   }
 }

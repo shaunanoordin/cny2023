@@ -76,7 +76,7 @@ export default class Levels {
     app.addEntity(new Moon(app, (CNY2023_COLS-1) / 2, CNY2023_CEILING_ROW - 8))
 
     // Ground
-    app.addEntity(new Ground(app, 0, CNY2023_ROWS - 1, CNY2023_COLS, 1))
+    app.addEntity(new Ground(app, CNY2023_COLS * -0.5, CNY2023_ROWS - 1, CNY2023_COLS * 2, 16))
 
     // Main boost pad
     this.firstBoostPad = app.addEntity(new BoostPad(
