@@ -35,8 +35,23 @@ export default class BoostPad extends Entity {
     app.applyCameraTransforms()
 
     if (layer === LAYERS.ENTITIES_UPPER) {
-      c2d.fillStyle = '#fff'
-      this.paint_circle(0, this.height)
+      const gradient = c2d.createLinearGradient(0, this.y - this.height / 2, 0, this.y + this.height / 2)
+      gradient.addColorStop(0, '#e0e0e0')
+      gradient.addColorStop(1, '#8080a0')
+      c2d.fillStyle = gradient
+      //c2d.fillStyle = '#e0e0e0'
+
+
+      this.paint_circle(0, this.height * 1.2)
+
+      const distanceBetweenSteps = this.height / 2
+      const maxSteps = this.width / 2 / distanceBetweenSteps
+      for (let step = 1; step < maxSteps ; step++) {
+        const size = this.height * ((maxSteps - step) / maxSteps * 0.6 + 0.6)
+        const offsetX = step * distanceBetweenSteps
+        this.paint_circle(offsetX, size)
+        this.paint_circle(-offsetX, size)
+      }
     }
 
     app.undoCameraTransforms()

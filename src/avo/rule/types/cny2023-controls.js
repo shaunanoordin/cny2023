@@ -49,8 +49,8 @@ export default class CNY2023Controls extends Rule {
       gradient.addColorStop(0, '#404040')
       gradient.addColorStop(1, '#6080a0')
 
-      c2d.fillStyle = gradient;
-      c2d.fillRect(0, 0, 1280, 640);
+      c2d.fillStyle = gradient
+      c2d.fillRect(0, 0, 1280, 640)
       // ----------------
 
       // Paint stars
