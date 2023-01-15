@@ -1,6 +1,6 @@
 import Rule from '@avo/rule'
 import {
-  EXPECTED_TIMESTEP, LAYERS, TILE_SIZE,
+  DIRECTIONS, EXPECTED_TIMESTEP, LAYERS, TILE_SIZE,
   CNY2023_GRAVITY, CNY2023_RABBIT_SPEED,
   CNY2023_COLS, CNY2023_ROWS
 } from '@avo/constants'
@@ -78,10 +78,12 @@ export default class CNY2023Controls extends Rule {
 
     if (keysPressed['ArrowLeft'] || buttonArrowLeftPressed) {
       hero.pushX -= CNY2023_RABBIT_SPEED / TIME_MODIFIER
+      hero.direction = DIRECTIONS.WEST
     }
 
     if (keysPressed['ArrowRight'] || buttonArrowRightPressed) {
       hero.pushX += CNY2023_RABBIT_SPEED / TIME_MODIFIER
+      hero.direction = DIRECTIONS.EAST
     }
   }
 

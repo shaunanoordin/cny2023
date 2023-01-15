@@ -30,7 +30,7 @@ export default class Rabbit extends Entity {
 
     this._app.applyCameraTransforms()
 
-    const FLIP_SPRITE = (this.getSpriteDirectionEW() === DIRECTIONS.WEST) ? -1 : 1
+    const FLIP_SPRITE = (this.direction === DIRECTIONS.WEST) ? -1 : 1
     const SPRITE_SCALE = 3
     const SPRITE_SIZE = 32
 
