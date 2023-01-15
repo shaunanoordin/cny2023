@@ -28,7 +28,7 @@ export default class BoostPad extends Entity {
   }
 
   paint (layer = 0) {
-    super.paint(layer)
+    // super.paint(layer)
 
     const app = this._app
     const c2d = this._app.canvas2d
@@ -40,10 +40,12 @@ export default class BoostPad extends Entity {
       gradient.addColorStop(1, '#8080a0')
       c2d.fillStyle = gradient
       //c2d.fillStyle = '#e0e0e0'
+      //c2d.beginPath()
 
-
+      // Central "puff"
       this.paint_circle(0, this.height * 1.2)
 
+      // Programmatically fill up the central "puffs"
       const distanceBetweenSteps = this.height / 2
       const maxSteps = this.width / 2 / distanceBetweenSteps
       for (let step = 1; step < maxSteps ; step++) {
@@ -52,6 +54,14 @@ export default class BoostPad extends Entity {
         this.paint_circle(offsetX, size)
         this.paint_circle(-offsetX, size)
       }
+
+      // Edge "puffs"
+      this.paint_circle(-this.width / 2, this.height * 0.5)
+      this.paint_circle(this.width / 2, this.height * 0.5)
+
+      // Complete!
+      // c2d.closePath()
+      // c2d.fill()
     }
 
     app.undoCameraTransforms()
@@ -59,8 +69,11 @@ export default class BoostPad extends Entity {
 
   paint_circle (offsetX = 0, size = this.height) {
     const c2d = this._app.canvas2d
+    const offsetY = (size > this.height)
+      ? 0
+      : (this.height - size) / 2
     c2d.beginPath()
-    c2d.arc(this.x + offsetX, this.y, size / 2, 0, 2 * Math.PI)
+    c2d.arc(this.x + offsetX, this.y + offsetY, size / 2, 0, 2 * Math.PI)
     c2d.closePath()
     c2d.fill()
   }
