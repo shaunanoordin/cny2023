@@ -1,5 +1,5 @@
 import Entity from '@avo/entity'
-import { TILE_SIZE } from '@avo/constants'
+import { LAYERS, TILE_SIZE } from '@avo/constants'
 import { easeOut } from '@avo/misc'
 
 const DECAY_MAX = 200
@@ -39,7 +39,39 @@ export default class Coin extends Entity {
   }
 
   paint (layer = 0) {
-    super.paint(layer)
+    const app = this._app
+    const c2d = app.canvas2d
+    const animationSpriteSheet = app.assets['sprites']
+    if (!animationSpriteSheet) return
+
+    app.applyCameraTransforms()
+
+    const FLIP_SPRITE = 1
+    const SPRITE_SCALE = 2
+    const SPRITE_SIZE = 16
+
+    // Draw the sprite
+    if (layer === LAYERS.ATOMS_LOWER) {
+      const srcX = this.getSpriteCol() * SPRITE_SIZE
+      const srcY = this.getSpriteRow() * SPRITE_SIZE
+      const sizeX = SPRITE_SIZE
+      const sizeY = SPRITE_SIZE
+
+      c2d.translate(this.x, this.y)  // 1. This moves the 'drawing origin' to match the position of (the centre of) the Entity.
+      c2d.scale(SPRITE_SCALE * FLIP_SPRITE, SPRITE_SCALE)  // 2. This ensures the sprite scales with the 'drawing origin' as the anchor point.
+      // c2d.rotate(this.rotation)  // 3. If we wanted to, we could rotate the sprite around the 'drawing origin'.
+
+      // 4. tgtX and tgtY specify where to draw the sprite, relative to the 'drawing origin'.
+      const tgtX = -sizeX / 2  // Align centre of sprite to origin
+      const tgtY = -sizeY / 2  // Align centre sprite to origin
+
+      c2d.drawImage(animationSpriteSheet.img,
+        srcX, srcY, sizeX, sizeY,
+        tgtX, tgtY, sizeX, sizeY
+      )
+    }
+
+    this._app.undoCameraTransforms()
 
     /*
     const c2d = this._app.canvas2d
@@ -100,5 +132,24 @@ export default class Coin extends Entity {
       goals.increaseScore()
     }
 
+  }
+
+  /*
+  Section: Animation
+  ----------------------------------------------------------------------------
+   */
+  getSpriteCol () {
+    return (!this.pickedUp) ? 2 : 3
+  }
+
+  getSpriteRow () {
+    const progress = (!this.pickedUp)
+      ? this.spinCounter / SPIN_MAX
+      : this.decayCounter / DECAY_MAX
+
+    if (progress < 0.25) return 0
+    else if (progress < 0.5) return 1
+    else if (progress < 0.75) return 2
+    else return 3
   }
 }

@@ -22,13 +22,11 @@ export default class Rabbit extends Entity {
 
   paint (layer = 0) {
     const app = this._app
-    // super.paint(layer)
-
     const c2d = app.canvas2d
     const animationSpriteSheet = app.assets['sprites']
     if (!animationSpriteSheet) return
 
-    this._app.applyCameraTransforms()
+    app.applyCameraTransforms()
 
     const FLIP_SPRITE = (this.direction === DIRECTIONS.WEST) ? -1 : 1
     const SPRITE_SCALE = 3
