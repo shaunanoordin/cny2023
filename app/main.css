@@ -107,7 +107,7 @@ table th {
   position: absolute;
   cursor: pointer;
   color: #fff;
-  background: #c44;
+  background: #c04040;
   border: 2px solid #ccc;
   border-radius: 1rem;
   box-shadow: 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5);
@@ -167,15 +167,35 @@ table th {
   width: 80%;
   margin: 0 auto;
 }
+#app > main #home-menu #button-play {
+  padding: 2em;
+  animation-name: cny2023-button-glow;
+  animation-duration: 5s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-timing-function: ease;
+}
+#app > main #home-menu #button-play:focus, #app > main #home-menu #button-play:hover {
+  animation-duration: 1s;
+}
 #app > main #home-menu .row {
   display: flex;
-  flex-direction: row;
+  flex-direction: row-reverse;
 }
 #app > main #home-menu .col {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+@keyframes cny2023-button-glow {
+  from {
+    background: #c04040;
+  }
+  to {
+    background: #c06040;
+  }
 }
 
 /*# sourceMappingURL=main.css.map */
