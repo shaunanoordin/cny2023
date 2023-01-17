@@ -4,7 +4,7 @@ import { SHAPES, TILE_SIZE } from '@avo/constants'
 export default class Ground extends Entity {
   constructor (app, col = 0, row = 0, width = 1, height = 1, cutCorner = false) {
     super(app)
-    this._type = 'wall'
+    this._type = 'ground'
 
     this.colour = '#60a080'
     this.solid = true
