@@ -203,15 +203,17 @@ table {
     }
 
     #cny2023-card {
-      flex: 1 1 auto;
       display: block;
       width: 60%;
       margin: 0 auto;
     }
 
-    #button-play {
-      font-size: 1.5vw;
-      padding: 1.5vw;
+    .ui-button {
+      display: block;
+      position: static;
+
+      font-size: 1.25vw;
+      padding: 1vw;
       animation-name: cny2023-button-glow;
       animation-duration: 5s;
       animation-iteration-count: infinite;
@@ -236,6 +238,12 @@ table {
       flex-direction: column;
       /* align-items: center; */
       justify-content: center;
+    }
+
+    .highscore {
+      display: none;
+      text-align: center;
+      padding: 1em;
     }
   }
 }

@@ -382,6 +382,7 @@ export default class AvO {
       this.html.buttonReload.style.visibility = 'hidden'
       this.html.buttonArrowLeft.style.visibility = 'hidden'
       this.html.buttonArrowRight.style.visibility = 'hidden'
+      this.updateCNY2023HomeMenu()
       this.html.buttonPlay.focus()
     } else {
       this.html.homeMenu.style.visibility = 'hidden'
@@ -389,6 +390,23 @@ export default class AvO {
       this.html.buttonArrowLeft.style.visibility = 'visible'
       this.html.buttonArrowRight.style.visibility = 'visible'
       this.html.main.focus()
+    }
+  }
+
+  updateCNY2023HomeMenu() {
+    this.html.buttonPlay.focus()
+
+    // Show high scores
+    for (let i = 0 ; i < this.levels.cny2023HighScores.length ; i++) {
+      const highscore = this.levels.cny2023HighScores[i]
+      const htmlHighscore = document.getElementById(`highscore-${0}`)
+      if (!htmlHighscore) continue
+      if (highscore === undefined) {
+        htmlHighscore.style.display = 'none'
+      } else {
+        htmlHighscore.style.display = 'block'
+        htmlHighscore.innerText = `High score: ${highscore}`
+      }
     }
   }
 

@@ -171,21 +171,22 @@ table th {
   color: #f0a0a0;
 }
 #app > main #home-menu #cny2023-card {
-  flex: 1 1 auto;
   display: block;
   width: 60%;
   margin: 0 auto;
 }
-#app > main #home-menu #button-play {
-  font-size: 1.5vw;
-  padding: 1.5vw;
+#app > main #home-menu .ui-button {
+  display: block;
+  position: static;
+  font-size: 1.25vw;
+  padding: 1vw;
   animation-name: cny2023-button-glow;
   animation-duration: 5s;
   animation-iteration-count: infinite;
   animation-direction: alternate;
   animation-timing-function: ease;
 }
-#app > main #home-menu #button-play:focus, #app > main #home-menu #button-play:hover {
+#app > main #home-menu .ui-button:focus, #app > main #home-menu .ui-button:hover {
   animation-duration: 1s;
 }
 #app > main #home-menu .row {
@@ -200,6 +201,11 @@ table th {
   flex-direction: column;
   /* align-items: center; */
   justify-content: center;
+}
+#app > main #home-menu .highscore {
+  display: none;
+  text-align: center;
+  padding: 1em;
 }
 
 @keyframes cny2023-button-glow {
