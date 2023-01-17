@@ -88,6 +88,15 @@ export default class CNY2023Controls extends Rule {
       hero.pushX += CNY2023_RABBIT_SPEED / TIME_MODIFIER
       hero.direction = DIRECTIONS.EAST
     }
+
+    // DEBUG
+    // TODO: remove
+    const goals = app.rules['cny2023-goals']
+    if (keysPressed['(']) {
+      goals.triggerWinScreen()
+    } else if (keysPressed[')']) {
+      goals.triggerLoseScreen()
+    }
   }
 
   focusCamera () {
