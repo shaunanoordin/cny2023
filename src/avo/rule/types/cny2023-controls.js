@@ -11,6 +11,9 @@ const MIN_RABBIT_X = MIN_X + TILE_SIZE
 const MAX_RABBIT_X = MAX_X - TILE_SIZE
 const MAX_Y = CNY2023_ROWS * TILE_SIZE
 
+/*
+This Rule handles most of the moment-to-moment gameplay.
+ */
 export default class CNY2023Controls extends Rule {
   constructor (app) {
     super(app)
