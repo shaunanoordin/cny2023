@@ -13,7 +13,7 @@ import Coin from '@avo/entity/types/cny2023/coin'
 import CNY2023Controls from '@avo/rule/types/cny2023-controls'
 import CNY2023Goals from '@avo/rule/types/cny2023-goals'
 
-export const CNY2023_CEILING_ROW = -100
+export const CNY2023_CEILING_ROW = -160
 export const CNY2023_CEILING_Y = CNY2023_CEILING_ROW * TILE_SIZE
 export const CNY2023_FLOOR_Y = CNY2023_ROWS * TILE_SIZE
 
@@ -69,7 +69,7 @@ export default class Levels {
     //app.camera.target = app.hero
 
     // Moon
-    app.addEntity(new Moon(app, (CNY2023_COLS-1) / 2, CNY2023_CEILING_ROW - 8))
+    app.addEntity(new Moon(app, (CNY2023_COLS-1) / 2, CNY2023_CEILING_ROW - 4))
 
     // Ground
     app.addEntity(new Ground(app, CNY2023_COLS * -0.5, CNY2023_ROWS - 1, CNY2023_COLS * 2, 16))
