@@ -111,7 +111,14 @@ export default class Levels {
     const MIN_DIST = 2 * TILE_SIZE
     const MAX_DIST = 8 * TILE_SIZE
     const distFromPrev = Math.random() * (MAX_DIST - MIN_DIST) + MIN_DIST
-    const leftOrRight = (Math.random() < 0.5) ? -1 : 1
+    const leftOrRight = (function skewTowardsCentre() {
+      if (prevBoostPad && prevBoostPad.x < MID_X) {
+        return (Math.random() < 0.4) ? -1 : 1
+      } else if (prevBoostPad && prevBoostPad.x > MID_X) {
+        return (Math.random() < 0.6) ? -1 : 1
+      }
+      return (Math.random() < 0.5) ? -1 : 1
+    })()
 
     let x = (prevBoostPad) ? prevBoostPad.x : MID_X
     x = x + distFromPrev * leftOrRight
