@@ -17,11 +17,17 @@ export const CNY2023_CEILING_ROW = -160
 export const CNY2023_CEILING_Y = CNY2023_CEILING_ROW * TILE_SIZE
 export const CNY2023_FLOOR_Y = CNY2023_ROWS * TILE_SIZE
 
+const CNY2023_HIGHSCORE_STORAGE_KEY = 'cny2023.highscores'
+
 export default class Levels {
   constructor (app) {
     this._app = app
     this.current = 0
-    this.firstBoostPad = undefined  // CNY2023
+
+    // CNY2023
+    this.firstBoostPad = undefined
+    this.cny2023HighScores = [undefined]
+    this.loadCNY2023HighScores()
   }
 
   reset () {
@@ -160,5 +166,33 @@ export default class Levels {
 
     app.addEntity(new Coin(app, x, y))
     goals.maxScore++
+  }
+
+  registerCNY2023Score (score) {
+    const highscore = this.cny2023HighScores[this.current]
+
+    if (highscore === undefined || highscore < score) {
+      this.cny2023HighScores[this.current] = score
+    }
+
+    this.saveCNY2023HighScores()
+  }
+
+  saveCNY2023HighScores () {
+    const storage = window?.localStorage
+    if (!storage) return
+    storage.setItem(CNY2023_HIGHSCORE_STORAGE_KEY, JSON.stringify(this.cny2023HighScores))
+  }
+
+  loadCNY2023HighScores () {
+    const storage = window?.localStorage
+    if (!storage) return
+    try {
+      const str = storage.getItem(CNY2023_HIGHSCORE_STORAGE_KEY)
+      this.cny2023HighScores = (str) ? JSON.parse(str) : []
+    } catch (err) {
+      this.cny2023HighScores = []
+      console.error(err)
+    }
   }
 }

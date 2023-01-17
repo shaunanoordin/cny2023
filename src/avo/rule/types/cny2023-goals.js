@@ -155,6 +155,7 @@ export default class CNY2023Goals extends Rule {
   triggerWinScreen () {
     if (this.win || this.lose) return  // Don't trigger more than once
     this.win = true
+    this._app.levels.registerCNY2023Score(this.score)
   }
 
   triggerLoseScreen () {
