@@ -28,6 +28,7 @@ export default class CNY2023Goals extends Rule {
     this.returnedToHomeMenu = false
 
     this.score = 0
+    this.maxScore = 0
   }
 
   play (timeStep) {
@@ -81,7 +82,7 @@ export default class CNY2023Goals extends Rule {
       c2d.fillText(text, RIGHT, BOTTOM)
 
       // Print score
-      text = `Score: ${this.score}`
+      text = `Score: ${this.score} of ${this.maxScore}`
       c2d.textAlign = 'left'
       c2d.strokeStyle = '#fff'
       c2d.strokeText(text, LEFT, BOTTOM)

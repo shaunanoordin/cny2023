@@ -56,7 +56,7 @@ export default class Levels {
    */
   generate_default () {
     const app = this._app
-    const ROWS_BETWEEN_BOOSTSPADS = 8
+    const DISTANCE_BETWEEN_BOOSTSPADS = 8 * TILE_SIZE
     const FIRST_BOOST_PAD_WIDTH = 8 * TILE_SIZE
 
     app.addRule(new CNY2023Controls(app))
@@ -83,15 +83,14 @@ export default class Levels {
       TILE_SIZE
     ))
 
-    // Bounce pads
+    // Create Bounce Pads and Coins
     let prevBoostPad = this.firstBoostPad
-    for (let y = TILE_SIZE * 4 ; y >= CNY2023_CEILING_Y ; y -= (TILE_SIZE * ROWS_BETWEEN_BOOSTSPADS)) {
+    for (let y = TILE_SIZE * 4 ; y >= CNY2023_CEILING_Y ; y -= DISTANCE_BETWEEN_BOOSTSPADS) {
       prevBoostPad = this.createBoostPad(y, prevBoostPad)
-    }
 
-    // Coins
-    for (let y = TILE_SIZE * 4 ; y >= CNY2023_CEILING_Y ; y -= (TILE_SIZE * ROWS_BETWEEN_BOOSTSPADS)) {
-      this.createCoin(y + TILE_SIZE * 2)
+      if (y < 0) {  // Only create coins at a certain height
+        this.createCoin(y - DISTANCE_BETWEEN_BOOSTSPADS / 2)
+      }
     }
   }
 
@@ -152,6 +151,7 @@ export default class Levels {
 
   createCoin (y = 0) {
     const app = this._app
+    const goals = app.rules['cny2023-goals']
 
     const BUFFER = TILE_SIZE * 4
     const MIN_X = 0 + BUFFER
@@ -159,5 +159,6 @@ export default class Levels {
     const x = Math.random() * (MAX_X - MIN_X) + MIN_X
 
     app.addEntity(new Coin(app, x, y))
+    goals.maxScore++
   }
 }
