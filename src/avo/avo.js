@@ -34,8 +34,8 @@ export default class AvO {
       buttonArrowLeft: document.getElementById('button-arrow-left'),  // CNY2023
       buttonArrowRight: document.getElementById('button-arrow-right'),  // CNY2023
       buttonPlay: document.getElementById('button-play'),  // CNY2023
-      rotatePrompt: document.getElementById('rotate-prompt'),
-      buttonDismissRotatePrompt: document.getElementById('button-dismiss-rotate-prompt'),
+      rotatePrompt: document.getElementById('rotate-prompt'),  // CNY2023
+      buttonDismissRotatePrompt: document.getElementById('button-dismiss-rotate-prompt'),  // CNY2023
     }
 
     this.homeMenu = false
@@ -94,7 +94,7 @@ export default class AvO {
       buttonArrowRightPressed: false,
     }
 
-    this.rotatePromptDismissed = false;
+    this.rotatePromptDismissed = false  // CNY2023
 
     this.prevTime = null
     this.nextFrame = window.requestAnimationFrame(this.main.bind(this))
@@ -380,11 +380,12 @@ export default class AvO {
     this.html.interactionMenu.style.top = `${canvasBounds.top - mainDivBounds.top}px`
     this.html.interactionMenu.style.left = `${canvasBounds.left}px`
 
+    // CNY2023
     // Hide or show "Please Rotate Your Screen" prompt
-    if (!this.rotatePromptDismissed) {
+    const screenRatio = mainDivBounds.width / mainDivBounds.height
+    if (!this.rotatePromptDismissed && screenRatio < 0.8) {
       this.html.rotatePrompt.style.display = 'flex'
       this.html.buttonDismissRotatePrompt.focus()
-      console.log('+++ focus on rotatePrompt')
     } else {
       this.html.rotatePrompt.style.display = 'none'
     }
@@ -406,14 +407,13 @@ export default class AvO {
       this.html.main.focus()
     }
 
-    // Hack: refresh, refresh.
-    // Notably used for the rotate prompt
+    // CNY2023 Hack: update UI again.
+    // This allows buttonDismissRotatePrompt to get focus.
     this.updateUI()
   }
 
   updateCNY2023HomeMenu() {
     this.html.buttonPlay.focus()
-    console.log('+++ focus on buttonPlay')
 
     // Show high scores
     for (let i = 0 ; i < this.levels.cny2023HighScores.length ; i++) {
