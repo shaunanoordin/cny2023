@@ -13,12 +13,6 @@ import Coin from '@avo/entity/types/cny2023/coin'
 import CNY2023Controls from '@avo/rule/types/cny2023-controls'
 import CNY2023Goals from '@avo/rule/types/cny2023-goals'
 
-const MIN_X = 0
-const MAX_X = CNY2023_COLS * TILE_SIZE
-const MID_X = (MAX_X + MIN_X) / 2
-const ROWS_BETWEEN_BOOSTSPADS = 8
-const FIRST_BOOST_PAD_WIDTH = 8 * TILE_SIZE
-
 export const CNY2023_CEILING_ROW = -100
 export const CNY2023_CEILING_Y = CNY2023_CEILING_ROW * TILE_SIZE
 export const CNY2023_FLOOR_Y = CNY2023_ROWS * TILE_SIZE
@@ -62,6 +56,8 @@ export default class Levels {
    */
   generate_default () {
     const app = this._app
+    const ROWS_BETWEEN_BOOSTSPADS = 8
+    const FIRST_BOOST_PAD_WIDTH = 8 * TILE_SIZE
 
     app.addRule(new CNY2023Controls(app))
     app.addRule(new CNY2023Goals(app))
@@ -105,6 +101,9 @@ export default class Levels {
     const BUFFER = TILE_SIZE * 8
     const MIN_WIDTH = 6 * TILE_SIZE
     const MAX_WIDTH = 12 * TILE_SIZE
+    const MIN_X = 0
+    const MID_X = app.canvasWidth / 2
+    const MAX_X = app.canvasWidth / 2
     const width = Math.random() * (MAX_WIDTH - MIN_WIDTH) + MIN_WIDTH
     const height = TILE_SIZE
 
@@ -121,6 +120,10 @@ export default class Levels {
     const boostPad = app.addEntity(new BoostPad(app, x, y, width, height))
     const firstPad = this.firstBoostPad
 
+    // Make sure the boost pads don't go off-screen
+    if (boostPad.left < MIN_X) boostPad.left = MIN_X
+    if (boostPad.right > MAX_X) boostPad.right = MAX_X
+
     // Make sure the bottom few boost pads don't block the space directly above
     // the first/initial boost pad.
     if (y >= 0) {
@@ -128,12 +131,12 @@ export default class Levels {
         (firstPad.left < boostPad.right && boostPad.right < firstPad.right) ||
         (firstPad.left < boostPad.x && boostPad.x < firstPad.right)
       ) {
-        boostPad.right = this.firstBoostPad.left
+        boostPad.right = firstPad.left
       } else if (
         (firstPad.left < boostPad.left && boostPad.left < firstPad.right) ||
         (firstPad.left < boostPad.x && boostPad.x < firstPad.right)
       ) {
-        boostPad.left = this.firstBoostPad.right
+        boostPad.left = firstPad.right
       }
     }
 
@@ -143,6 +146,8 @@ export default class Levels {
   createCoin (y = 0) {
     const app = this._app
 
+    const MIN_X = 0
+    const MAX_X = app.canvasWidth / 2
     const BUFFER = TILE_SIZE * 2
     const x = Math.random() * (MAX_X - MIN_X - BUFFER * 2) + MIN_X + BUFFER
 
