@@ -159,9 +159,31 @@ table th {
   color: #fff;
   margin: auto;
   padding: auto;
-  width: 80%;
+  width: 70%;
   height: 90%;
   flex: 0 0 auto;
+}
+#app > main #home-menu #cny2023-card {
+  display: block;
+  width: 70%;
+  margin: 0 auto 0.25em auto;
+}
+#app > main #home-menu .row {
+  width: 80%;
+  padding: 1em;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row-reverse;
+}
+#app > main #home-menu .row .col {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: center;
+}
+#app > main #home-menu .row h2, #app > main #home-menu .row p {
+  margin: 0.5em 0;
 }
 #app > main #home-menu a {
   color: #e0a0a0;
@@ -169,11 +191,6 @@ table th {
 }
 #app > main #home-menu a:hover {
   color: #f0a0a0;
-}
-#app > main #home-menu #cny2023-card {
-  display: block;
-  width: 60%;
-  margin: 0 auto;
 }
 #app > main #home-menu .ui-button {
   display: block;
@@ -188,19 +205,6 @@ table th {
 }
 #app > main #home-menu .ui-button:focus, #app > main #home-menu .ui-button:hover {
   animation-duration: 1s;
-}
-#app > main #home-menu .row {
-  width: 70%;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: row-reverse;
-}
-#app > main #home-menu .col {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  /* align-items: center; */
-  justify-content: center;
 }
 #app > main #home-menu .highscore {
   display: none;

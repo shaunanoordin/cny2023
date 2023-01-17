@@ -188,9 +188,35 @@ table {
       color: #fff;
       margin: auto;
       padding: auto;
-      width: 80%;
+      width: 70%;
       height: 90%;
       flex: 0 0 auto;
+    }
+
+    #cny2023-card {
+      display: block;
+      width: 70%;
+      margin: 0 auto 0.25em auto;
+    }
+
+    .row {
+      width: 80%;
+      padding: 1em;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: row-reverse;
+
+      .col {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        /* align-items: center; */
+        justify-content: center;
+      }
+
+      h2, p {
+        margin: 0.5em 0
+      }
     }
 
     a {
@@ -200,12 +226,6 @@ table {
       &:hover {
         color: #f0a0a0;
       }
-    }
-
-    #cny2023-card {
-      display: block;
-      width: 60%;
-      margin: 0 auto;
     }
 
     .ui-button {
@@ -223,21 +243,6 @@ table {
       &:focus, &:hover {
         animation-duration: 1s;
       }
-    }
-
-    .row {
-      width: 70%;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: row-reverse;
-    }
-
-    .col {
-      flex: 1 1 auto;
-      display: flex;
-      flex-direction: column;
-      /* align-items: center; */
-      justify-content: center;
     }
 
     .highscore {
