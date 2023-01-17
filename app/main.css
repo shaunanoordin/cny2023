@@ -160,7 +160,7 @@ table th {
   margin: auto;
   padding: auto;
   width: 70%;
-  height: 90%;
+  min-height: 90%;
   flex: 0 0 auto;
 }
 #app > main #home-menu #cny2023-card {
@@ -176,6 +176,7 @@ table th {
   flex-direction: row-reverse;
 }
 #app > main #home-menu .row .col {
+  margin: 1em;
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;

@@ -189,7 +189,7 @@ table {
       margin: auto;
       padding: auto;
       width: 70%;
-      height: 90%;
+      min-height: 90%;
       flex: 0 0 auto;
     }
 
@@ -207,6 +207,7 @@ table {
       flex-direction: row-reverse;
 
       .col {
+        margin: 1em;
         flex: 1 1 auto;
         display: flex;
         flex-direction: column;
