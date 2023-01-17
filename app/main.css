@@ -212,6 +212,34 @@ table th {
   text-align: center;
   padding: 1em;
 }
+#app > main #rotate-prompt {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #e0e0e0;
+  color: #404040;
+  position: absolute;
+  padding: 2em;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height: 80%;
+}
+#app > main #button-dismiss-rotate-prompt {
+  cursor: pointer;
+  color: #fff;
+  background: #c04040;
+  border: 2px solid #ccc;
+  border-radius: 1rem;
+  box-shadow: 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5);
+  padding: 1em 0.5em;
+}
+#app > main #button-dismiss-rotate-prompt:hover {
+  border: 2px solid #fff;
+}
+#app > main #button-dismiss-rotate-prompt:active {
+  border: 2px solid #888;
+}
 
 @keyframes cny2023-button-glow {
   from {

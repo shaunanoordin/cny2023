@@ -34,6 +34,8 @@ export default class AvO {
       buttonArrowLeft: document.getElementById('button-arrow-left'),  // CNY2023
       buttonArrowRight: document.getElementById('button-arrow-right'),  // CNY2023
       buttonPlay: document.getElementById('button-play'),  // CNY2023
+      rotatePrompt: document.getElementById('rotate-prompt'),
+      buttonDismissRotatePrompt: document.getElementById('button-dismiss-rotate-prompt'),
     }
 
     this.homeMenu = false
@@ -91,6 +93,8 @@ export default class AvO {
       buttonArrowLeftPressed: false,
       buttonArrowRightPressed: false,
     }
+
+    this.rotatePromptDismissed = false;
 
     this.prevTime = null
     this.nextFrame = window.requestAnimationFrame(this.main.bind(this))
@@ -319,6 +323,8 @@ export default class AvO {
     // CNY2023
     // --------
     this.html.buttonPlay.addEventListener('click', this.buttonPlay_onClick.bind(this))
+    this.html.buttonDismissRotatePrompt.addEventListener('click', this.buttonDismissRotatePrompt_onClick.bind(this))
+    this.html.buttonDismissRotatePrompt.addEventListener('blur', this.buttonDismissRotatePrompt_onClick.bind(this))
 
     if (window.PointerEvent) {
       this.html.buttonArrowLeft.addEventListener('pointerdown', this.buttonArrowLeft_onDown.bind(this))
@@ -373,6 +379,15 @@ export default class AvO {
     this.html.interactionMenu.style.height = `${canvasBounds.height}px`
     this.html.interactionMenu.style.top = `${canvasBounds.top - mainDivBounds.top}px`
     this.html.interactionMenu.style.left = `${canvasBounds.left}px`
+
+    // Hide or show "Please Rotate Your Screen" prompt
+    if (!this.rotatePromptDismissed) {
+      this.html.rotatePrompt.style.display = 'flex'
+      this.html.buttonDismissRotatePrompt.focus()
+      console.log('+++ focus on rotatePrompt')
+    } else {
+      this.html.rotatePrompt.style.display = 'none'
+    }
   }
 
   setHomeMenu (homeMenu) {
@@ -383,7 +398,6 @@ export default class AvO {
       this.html.buttonArrowLeft.style.visibility = 'hidden'
       this.html.buttonArrowRight.style.visibility = 'hidden'
       this.updateCNY2023HomeMenu()
-      this.html.buttonPlay.focus()
     } else {
       this.html.homeMenu.style.visibility = 'hidden'
       this.html.buttonReload.style.visibility = 'visible'
@@ -391,10 +405,15 @@ export default class AvO {
       this.html.buttonArrowRight.style.visibility = 'visible'
       this.html.main.focus()
     }
+
+    // Hack: refresh, refresh.
+    // Notably used for the rotate prompt
+    this.updateUI()
   }
 
   updateCNY2023HomeMenu() {
     this.html.buttonPlay.focus()
+    console.log('+++ focus on buttonPlay')
 
     // Show high scores
     for (let i = 0 ; i < this.levels.cny2023HighScores.length ; i++) {
@@ -554,6 +573,11 @@ export default class AvO {
   buttonPlay_onClick (e) {
     this.setHomeMenu(false)
     this.levels.load(STARTING_LEVEL)
+  }
+
+  buttonDismissRotatePrompt_onClick (e) {
+    this.rotatePromptDismissed = true
+    this.updateUI()
   }
 
   /*
