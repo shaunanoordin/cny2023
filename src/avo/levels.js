@@ -103,7 +103,7 @@ export default class Levels {
     const MAX_WIDTH = 12 * TILE_SIZE
     const MIN_X = 0
     const MID_X = app.canvasWidth / 2
-    const MAX_X = app.canvasWidth / 2
+    const MAX_X = app.canvasWidth
     const width = Math.random() * (MAX_WIDTH - MIN_WIDTH) + MIN_WIDTH
     const height = TILE_SIZE
 
@@ -146,10 +146,10 @@ export default class Levels {
   createCoin (y = 0) {
     const app = this._app
 
-    const MIN_X = 0
-    const MAX_X = app.canvasWidth / 2
-    const BUFFER = TILE_SIZE * 2
-    const x = Math.random() * (MAX_X - MIN_X - BUFFER * 2) + MIN_X + BUFFER
+    const BUFFER = TILE_SIZE * 4
+    const MIN_X = 0 + BUFFER
+    const MAX_X = app.canvasWidth - BUFFER
+    const x = Math.random() * (MAX_X - MIN_X) + MIN_X
 
     app.addEntity(new Coin(app, x, y))
   }
