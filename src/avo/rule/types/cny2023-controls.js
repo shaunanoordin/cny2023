@@ -2,7 +2,8 @@ import Rule from '@avo/rule'
 import {
   DIRECTIONS, EXPECTED_TIMESTEP, LAYERS, TILE_SIZE,
   CNY2023_GRAVITY, CNY2023_RABBIT_SPEED,
-  CNY2023_COLS, CNY2023_ROWS
+  CNY2023_COLS, CNY2023_ROWS,
+  PLAYER_ACTIONS,
 } from '@avo/constants'
 
 const MIN_X = 0
@@ -10,6 +11,8 @@ const MAX_X = CNY2023_COLS * TILE_SIZE
 const MIN_RABBIT_X = MIN_X + TILE_SIZE
 const MAX_RABBIT_X = MAX_X - TILE_SIZE
 const MAX_Y = CNY2023_ROWS * TILE_SIZE
+const MIN_POINTER_MOVEMENT = TILE_SIZE / 2
+const MAX_POINTER_MOVEMENT = TILE_SIZE * 8
 
 /*
 This Rule handles most of the moment-to-moment gameplay.
@@ -57,6 +60,7 @@ export default class CNY2023Controls extends Rule {
       // ----------------
 
       // Paint stars
+      // ----------------
       c2d.fillStyle = '#fff'
       this.stars.forEach(star => {
         c2d.beginPath()
@@ -64,6 +68,30 @@ export default class CNY2023Controls extends Rule {
         c2d.closePath()
         c2d.fill()
       })
+      // ----------------
+
+    } else if (layer === LAYERS.HUD) {
+      if (app.playerAction === PLAYER_ACTIONS.POINTER_DOWN) {
+        const { pointerCurrent, pointerStart } = app.playerInput
+
+        c2d.strokeStyle = '#c04040'
+        c2d.lineWidth = 4
+
+        c2d.beginPath()
+        c2d.arc(pointerStart.x, pointerStart.y, MIN_POINTER_MOVEMENT, 0, 2 * Math.PI)
+        c2d.closePath()
+        c2d.stroke()
+
+        let pointerDist = pointerCurrent.x - pointerStart.x
+        if (pointerDist < 0) pointerDist = Math.max(pointerDist, -MAX_POINTER_MOVEMENT)
+        if (pointerDist > 0) pointerDist = Math.min(pointerDist, MAX_POINTER_MOVEMENT)
+
+        c2d.beginPath()
+        c2d.moveTo(pointerStart.x, pointerStart.y)
+        c2d.lineTo(pointerStart.x + pointerDist, pointerStart.y)
+        c2d.closePath()
+        c2d.stroke()
+      }
     }
   }
 
@@ -74,18 +102,29 @@ export default class CNY2023Controls extends Rule {
       keysPressed,
       buttonArrowLeftPressed,
       buttonArrowRightPressed,
+      pointerCurrent,
+      pointerStart,
     } = app.playerInput
     const TIME_MODIFIER = timeStep / EXPECTED_TIMESTEP
+    let rabbitSpeed = CNY2023_RABBIT_SPEED / TIME_MODIFIER
 
     if (!hero) return
 
-    if (keysPressed['ArrowLeft'] || buttonArrowLeftPressed) {
-      hero.pushX -= CNY2023_RABBIT_SPEED / TIME_MODIFIER
+    let pointerMovementX = 0
+    if (app.playerAction === PLAYER_ACTIONS.POINTER_DOWN) {
+      pointerMovementX = (pointerCurrent?.x || 0) - (pointerStart?.x || 0)
+      const pointerDist = (Math.min(Math.max(Math.abs(pointerMovementX), MIN_POINTER_MOVEMENT), MAX_POINTER_MOVEMENT) - MIN_POINTER_MOVEMENT) / (MAX_POINTER_MOVEMENT - MIN_POINTER_MOVEMENT)
+      const pointerSpeedModifier = 1 + 1 * pointerDist
+      rabbitSpeed *= pointerSpeedModifier
+    }
+
+    if (keysPressed['ArrowLeft'] || buttonArrowLeftPressed || pointerMovementX < -MIN_POINTER_MOVEMENT) {
+      hero.pushX -= rabbitSpeed
       hero.direction = DIRECTIONS.WEST
     }
 
-    if (keysPressed['ArrowRight'] || buttonArrowRightPressed) {
-      hero.pushX += CNY2023_RABBIT_SPEED / TIME_MODIFIER
+    if (keysPressed['ArrowRight'] || buttonArrowRightPressed || pointerMovementX > MIN_POINTER_MOVEMENT) {
+      hero.pushX += rabbitSpeed
       hero.direction = DIRECTIONS.EAST
     }
   }
