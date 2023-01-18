@@ -12,7 +12,7 @@ const MIN_RABBIT_X = MIN_X + TILE_SIZE
 const MAX_RABBIT_X = MAX_X - TILE_SIZE
 const MAX_Y = CNY2023_ROWS * TILE_SIZE
 const MIN_POINTER_MOVEMENT = TILE_SIZE / 2
-const MAX_POINTER_MOVEMENT = TILE_SIZE * 4
+const MAX_POINTER_MOVEMENT = TILE_SIZE * 8
 
 /*
 This Rule handles most of the moment-to-moment gameplay.
@@ -82,9 +82,13 @@ export default class CNY2023Controls extends Rule {
         c2d.closePath()
         c2d.stroke()
 
+        let pointerDist = pointerCurrent.x - pointerStart.x
+        if (pointerDist < 0) pointerDist = Math.max(pointerDist, -MAX_POINTER_MOVEMENT)
+        if (pointerDist > 0) pointerDist = Math.min(pointerDist, MAX_POINTER_MOVEMENT)
+
         c2d.beginPath()
         c2d.moveTo(pointerStart.x, pointerStart.y)
-        c2d.lineTo(pointerCurrent.x, pointerStart.y)
+        c2d.lineTo(pointerStart.x + pointerDist, pointerStart.y)
         c2d.closePath()
         c2d.stroke()
       }
