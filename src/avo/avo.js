@@ -34,6 +34,8 @@ export default class AvO {
       buttonArrowLeft: document.getElementById('button-arrow-left'),  // CNY2023
       buttonArrowRight: document.getElementById('button-arrow-right'),  // CNY2023
       buttonPlay: document.getElementById('button-play'),  // CNY2023
+      rotatePrompt: document.getElementById('rotate-prompt'),  // CNY2023
+      buttonDismissRotatePrompt: document.getElementById('button-dismiss-rotate-prompt'),  // CNY2023
     }
 
     this.homeMenu = false
@@ -91,6 +93,8 @@ export default class AvO {
       buttonArrowLeftPressed: false,
       buttonArrowRightPressed: false,
     }
+
+    this.rotatePromptDismissed = false  // CNY2023
 
     this.prevTime = null
     this.nextFrame = window.requestAnimationFrame(this.main.bind(this))
@@ -319,6 +323,8 @@ export default class AvO {
     // CNY2023
     // --------
     this.html.buttonPlay.addEventListener('click', this.buttonPlay_onClick.bind(this))
+    this.html.buttonDismissRotatePrompt.addEventListener('click', this.buttonDismissRotatePrompt_onClick.bind(this))
+    this.html.buttonDismissRotatePrompt.addEventListener('blur', this.buttonDismissRotatePrompt_onClick.bind(this))
 
     if (window.PointerEvent) {
       this.html.buttonArrowLeft.addEventListener('pointerdown', this.buttonArrowLeft_onDown.bind(this))
@@ -373,6 +379,16 @@ export default class AvO {
     this.html.interactionMenu.style.height = `${canvasBounds.height}px`
     this.html.interactionMenu.style.top = `${canvasBounds.top - mainDivBounds.top}px`
     this.html.interactionMenu.style.left = `${canvasBounds.left}px`
+
+    // CNY2023
+    // Hide or show "Please Rotate Your Screen" prompt
+    const screenRatio = mainDivBounds.width / mainDivBounds.height
+    if (!this.rotatePromptDismissed && screenRatio < 0.8) {
+      this.html.rotatePrompt.style.display = 'flex'
+      this.html.buttonDismissRotatePrompt.focus()
+    } else {
+      this.html.rotatePrompt.style.display = 'none'
+    }
   }
 
   setHomeMenu (homeMenu) {
@@ -382,13 +398,34 @@ export default class AvO {
       this.html.buttonReload.style.visibility = 'hidden'
       this.html.buttonArrowLeft.style.visibility = 'hidden'
       this.html.buttonArrowRight.style.visibility = 'hidden'
-      this.html.buttonPlay.focus()
+      this.updateCNY2023HomeMenu()
     } else {
       this.html.homeMenu.style.visibility = 'hidden'
       this.html.buttonReload.style.visibility = 'visible'
       this.html.buttonArrowLeft.style.visibility = 'visible'
       this.html.buttonArrowRight.style.visibility = 'visible'
       this.html.main.focus()
+    }
+
+    // CNY2023 Hack: update UI again.
+    // This allows buttonDismissRotatePrompt to get focus.
+    this.updateUI()
+  }
+
+  updateCNY2023HomeMenu() {
+    this.html.buttonPlay.focus()
+
+    // Show high scores
+    for (let i = 0 ; i < this.levels.cny2023HighScores.length ; i++) {
+      const highscore = this.levels.cny2023HighScores[i]
+      const htmlHighscore = document.getElementById(`highscore-${0}`)
+      if (!htmlHighscore) continue
+      if (highscore === undefined) {
+        htmlHighscore.style.display = 'none'
+      } else {
+        htmlHighscore.style.display = 'block'
+        htmlHighscore.innerText = `High score: ${highscore}`
+      }
     }
   }
 
@@ -495,14 +532,17 @@ export default class AvO {
     const isFullscreen = document.fullscreenElement
     if (!isFullscreen) {
       if (this.html.main.requestFullscreen) {
-        this.html.main.className = 'fullscreen'
-        this.html.main.requestFullscreen()
+        this.html.main.requestFullscreen().then(() => {
+          this.html.main.className = 'fullscreen'
+          this.updateUI()
+        })
       }
     } else {
-      document.exitFullscreen?.()
-      this.html.main.className = ''
+      document.exitFullscreen?.().then(() => {
+        this.html.main.className = ''
+        this.updateUI()
+      })
     }
-    this.updateUI()
   }
 
   buttonReload_onClick () {
@@ -533,6 +573,11 @@ export default class AvO {
   buttonPlay_onClick (e) {
     this.setHomeMenu(false)
     this.levels.load(STARTING_LEVEL)
+  }
+
+  buttonDismissRotatePrompt_onClick (e) {
+    this.rotatePromptDismissed = true
+    this.updateUI()
   }
 
   /*

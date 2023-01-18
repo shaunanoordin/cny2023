@@ -1,8 +1,8 @@
 import Rule from '@avo/rule'
 import { CNY2023_COLS, CNY2023_ROWS, LAYERS, TILE_SIZE } from '@avo/constants'
 
-const ANIMATION_MID = 200
-const ANIMATION_MAX = 5000
+const ANIMATION_TIME_TO_EXPAND_WIN_SCREEN = 200
+const ANIMATION_TIME_UNTIL_RETURN_TO_HOME_MENU = 5000
 const MIN_X = 0
 const MIN_Y = 0
 const MAX_X = CNY2023_COLS * TILE_SIZE  // Canvas width
@@ -25,17 +25,27 @@ export default class CNY2023Goals extends Rule {
     this.win = false
     this.lose = false
     this.animationCounter = 0
+    this.returnedToHomeMenu = false
 
     this.score = 0
+    this.maxScore = 0
   }
 
   play (timeStep) {
+    const app = this._app
+
+    // When the player wins or loses, trigger the appropriate animation.
     if (this.win || this.lose) {
-      this.animationCounter = Math.min(this.animationCounter + timeStep, ANIMATION_MAX)
+      this.animationCounter = Math.min(this.animationCounter + timeStep, ANIMATION_TIME_UNTIL_RETURN_TO_HOME_MENU)
     }
 
-    if (this.animationCounter >= ANIMATION_MAX) {
-      // TODO: show home screen
+    // When the win/lose animation is complete, send the player back to the home
+    // menu. Only do this once, though.
+    if (this.animationCounter >= ANIMATION_TIME_UNTIL_RETURN_TO_HOME_MENU) {
+      if (!this.returnedToHomeMenu) {
+        app.setHomeMenu(true)
+        this.returnedToHomeMenu = true
+      }
     }
   }
 
@@ -45,19 +55,21 @@ export default class CNY2023Goals extends Rule {
     const app = this._app
     const hero = app.hero
     const c2d = app.canvas2d
+    const goals = app.rules['cny2023-goals']
     let imageAsset = undefined
 
-    if (!this.win && !this.lose) {
+    if (!this.win && !this.lose) {  // Rabbit is still trying to reach the moon
 
-      // Paint the current score
+      // Paint the current player status
       // ----------------
       const LEFT = HUD_SCREEN_EDGE_X_OFFSET
       const RIGHT = app.canvasWidth - HUD_SCREEN_EDGE_X_OFFSET
       const BOTTOM = app.canvasHeight + HUD_SCREEN_EDGE_Y_OFFSET
-      c2d.font = '2em Source Code Pro'
+      c2d.font = '2em Verdana'
       c2d.textBaseline = 'bottom'
       c2d.lineWidth = 8
 
+      // Paint jump height
       const jumpHeight = (hero)
         ? FLOOR_HEIGHT_OFFSET - hero.y
         : 0
@@ -69,7 +81,8 @@ export default class CNY2023Goals extends Rule {
       c2d.fillStyle = '#c44'
       c2d.fillText(text, RIGHT, BOTTOM)
 
-      text = `Score: ${this.score}`
+      // Print score
+      text = `Score: ${this.score} of ${this.maxScore}`
       c2d.textAlign = 'left'
       c2d.strokeStyle = '#fff'
       c2d.strokeText(text, LEFT, BOTTOM)
@@ -77,7 +90,7 @@ export default class CNY2023Goals extends Rule {
       c2d.fillText(text, LEFT, BOTTOM)
       // ----------------
 
-    } else {
+    } else {  // Rabbit reached the moon OR crashed
 
       // Paint Win or Lose screens
       // ----------------
@@ -85,7 +98,9 @@ export default class CNY2023Goals extends Rule {
       if (this.lose) imageAsset = app.assets['lose']
       if (!imageAsset) return
 
-      const progress = Math.min(this.animationCounter / ANIMATION_MID, 1.0)
+      // The win/lose screen quickly expands when it first appears, then lingers
+      // there for the rest of the animation duration.
+      const progress = Math.min(this.animationCounter / ANIMATION_TIME_TO_EXPAND_WIN_SCREEN, 1.0)
       const sizeFactor = progress * 0.6 + 0.2
 
       const sizeX = IMAGE_WIDTH * sizeFactor
@@ -96,6 +111,42 @@ export default class CNY2023Goals extends Rule {
       c2d.drawImage(imageAsset.img,
         tgtX, tgtY, sizeX, sizeY
       )
+
+      // Prepare text styles
+      let text = ''
+      let textX = 0
+      let textY = 0
+      c2d.font = '2em Verdana'
+      c2d.textBaseline = 'bottom'
+      c2d.lineWidth = 8
+      c2d.strokeStyle = '#fff'
+      c2d.fillStyle = '#c44'
+
+      // Paint score
+      if (this.win) {
+        c2d.textAlign = 'left'
+        text = `YOU DID IT!`
+        textX = app.canvasWidth * 0.6
+        textY = app.canvasHeight * 0.3
+        c2d.strokeText(text, textX, textY)
+        c2d.fillText(text, textX, textY)
+
+        text = `Score: ${goals?.score}`
+        textY = textY + 64
+        c2d.strokeText(text, textX, textY)
+        c2d.fillText(text, textX, textY)
+      }
+
+      // Paint retry prompt
+      if (this.lose) {
+        c2d.textAlign = 'right'
+        text = `Whoops! Try again?`
+        textX = app.canvasWidth * 0.4
+        textY = app.canvasHeight * 0.2
+        c2d.strokeText(text, textX, textY)
+        c2d.fillText(text, textX, textY)
+      }
+
       // ----------------
     }
 
@@ -104,15 +155,12 @@ export default class CNY2023Goals extends Rule {
   triggerWinScreen () {
     if (this.win || this.lose) return  // Don't trigger more than once
     this.win = true
-
-    console.log('WIN')
+    this._app.levels.registerCNY2023Score(this.score)
   }
 
   triggerLoseScreen () {
     if (this.win || this.lose) return  // Don't trigger more than once
     this.lose = true
-
-    console.log('LOSE')
   }
 
   increaseScore () {

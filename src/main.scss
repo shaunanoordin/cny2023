@@ -188,9 +188,36 @@ table {
       color: #fff;
       margin: auto;
       padding: auto;
-      width: 80%;
-      height: 90%;
+      width: 70%;
+      min-height: 90%;
       flex: 0 0 auto;
+    }
+
+    #cny2023-card {
+      display: block;
+      width: 70%;
+      margin: 0 auto 0.25em auto;
+    }
+
+    .row {
+      width: 80%;
+      padding: 1em;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: row-reverse;
+
+      .col {
+        margin: 1em;
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        /* align-items: center; */
+        justify-content: center;
+      }
+
+      h2, p {
+        margin: 0.5em 0
+      }
     }
 
     a {
@@ -202,16 +229,12 @@ table {
       }
     }
 
-    #cny2023-card {
-      flex: 1 1 auto;
+    .ui-button {
       display: block;
-      width: 60%;
-      margin: 0 auto;
-    }
+      position: static;
 
-    #button-play {
-      font-size: 1.5vw;
-      padding: 1.5vw;
+      font-size: 1.25vw;
+      padding: 1vw;
       animation-name: cny2023-button-glow;
       animation-duration: 5s;
       animation-iteration-count: infinite;
@@ -223,19 +246,42 @@ table {
       }
     }
 
-    .row {
-      width: 70%;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: row-reverse;
+    .highscore {
+      display: none;
+      text-align: center;
+      padding: 1em;
+    }
+  }
+
+  #rotate-prompt {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: $light;
+    color: $dark;
+    position: absolute;
+    padding: 2em;
+    top: 5%;
+    left: 5%;
+    width: 90%;
+    height: 80%;
+  }
+
+  #button-dismiss-rotate-prompt {
+    cursor: pointer;
+    color: #fff;
+    background: #c04040;
+    border: 2px solid #ccc;
+    border-radius: 1rem;
+    box-shadow: 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5);
+    padding: 1em 0.5em;
+
+    &:hover {
+      border: 2px solid #fff;
     }
 
-    .col {
-      flex: 1 1 auto;
-      display: flex;
-      flex-direction: column;
-      /* align-items: center; */
-      justify-content: center;
+    &:active {
+      border: 2px solid #888;
     }
   }
 }
