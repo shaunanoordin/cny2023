@@ -2,7 +2,8 @@ import Rule from '@avo/rule'
 import {
   DIRECTIONS, EXPECTED_TIMESTEP, LAYERS, TILE_SIZE,
   CNY2023_GRAVITY, CNY2023_RABBIT_SPEED,
-  CNY2023_COLS, CNY2023_ROWS
+  CNY2023_COLS, CNY2023_ROWS,
+  PLAYER_ACTIONS,
 } from '@avo/constants'
 
 const MIN_X = 0
@@ -10,6 +11,7 @@ const MAX_X = CNY2023_COLS * TILE_SIZE
 const MIN_RABBIT_X = MIN_X + TILE_SIZE
 const MAX_RABBIT_X = MAX_X - TILE_SIZE
 const MAX_Y = CNY2023_ROWS * TILE_SIZE
+const MINIMUM_POINTER_MOVEMENT = 10
 
 /*
 This Rule handles most of the moment-to-moment gameplay.
@@ -74,17 +76,24 @@ export default class CNY2023Controls extends Rule {
       keysPressed,
       buttonArrowLeftPressed,
       buttonArrowRightPressed,
+      pointerCurrent,
+      pointerStart,
     } = app.playerInput
     const TIME_MODIFIER = timeStep / EXPECTED_TIMESTEP
 
     if (!hero) return
 
-    if (keysPressed['ArrowLeft'] || buttonArrowLeftPressed) {
+    let pointerMovementX = 0
+    if (app.playerAction === PLAYER_ACTIONS.POINTER_DOWN) {
+      pointerMovementX = (pointerCurrent?.x || 0) - (pointerStart?.x || 0)
+    }
+
+    if (keysPressed['ArrowLeft'] || buttonArrowLeftPressed || pointerMovementX < -MINIMUM_POINTER_MOVEMENT) {
       hero.pushX -= CNY2023_RABBIT_SPEED / TIME_MODIFIER
       hero.direction = DIRECTIONS.WEST
     }
 
-    if (keysPressed['ArrowRight'] || buttonArrowRightPressed) {
+    if (keysPressed['ArrowRight'] || buttonArrowRightPressed || pointerMovementX > MINIMUM_POINTER_MOVEMENT) {
       hero.pushX += CNY2023_RABBIT_SPEED / TIME_MODIFIER
       hero.direction = DIRECTIONS.EAST
     }
