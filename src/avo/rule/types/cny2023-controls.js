@@ -11,7 +11,8 @@ const MAX_X = CNY2023_COLS * TILE_SIZE
 const MIN_RABBIT_X = MIN_X + TILE_SIZE
 const MAX_RABBIT_X = MAX_X - TILE_SIZE
 const MAX_Y = CNY2023_ROWS * TILE_SIZE
-const MINIMUM_POINTER_MOVEMENT = 10
+const MIN_POINTER_MOVEMENT = 16
+const MAX_POINTER_MOVEMENT = 64
 
 /*
 This Rule handles most of the moment-to-moment gameplay.
@@ -59,6 +60,7 @@ export default class CNY2023Controls extends Rule {
       // ----------------
 
       // Paint stars
+      // ----------------
       c2d.fillStyle = '#fff'
       this.stars.forEach(star => {
         c2d.beginPath()
@@ -66,6 +68,26 @@ export default class CNY2023Controls extends Rule {
         c2d.closePath()
         c2d.fill()
       })
+      // ----------------
+    } else if (layer === LAYERS.HUD) {
+      if (app.playerAction === PLAYER_ACTIONS.POINTER_DOWN) {
+        const { pointerCurrent, pointerStart } = app.playerInput
+
+        c2d.strokeStyle = '#c04040'
+        c2d.lineWidth = 4
+
+        c2d.beginPath()
+        c2d.arc(pointerStart.x, pointerStart.y, MIN_POINTER_MOVEMENT, 0, 2 * Math.PI)
+        c2d.closePath()
+        c2d.stroke()
+
+        c2d.beginPath()
+        c2d.moveTo(pointerStart.x, pointerStart.y)
+        c2d.lineTo(pointerCurrent.x, pointerStart.y)
+        c2d.closePath()
+        c2d.stroke()
+
+      }
     }
   }
 
@@ -88,12 +110,12 @@ export default class CNY2023Controls extends Rule {
       pointerMovementX = (pointerCurrent?.x || 0) - (pointerStart?.x || 0)
     }
 
-    if (keysPressed['ArrowLeft'] || buttonArrowLeftPressed || pointerMovementX < -MINIMUM_POINTER_MOVEMENT) {
+    if (keysPressed['ArrowLeft'] || buttonArrowLeftPressed || pointerMovementX < -MIN_POINTER_MOVEMENT) {
       hero.pushX -= CNY2023_RABBIT_SPEED / TIME_MODIFIER
       hero.direction = DIRECTIONS.WEST
     }
 
-    if (keysPressed['ArrowRight'] || buttonArrowRightPressed || pointerMovementX > MINIMUM_POINTER_MOVEMENT) {
+    if (keysPressed['ArrowRight'] || buttonArrowRightPressed || pointerMovementX > MIN_POINTER_MOVEMENT) {
       hero.pushX += CNY2023_RABBIT_SPEED / TIME_MODIFIER
       hero.direction = DIRECTIONS.EAST
     }
