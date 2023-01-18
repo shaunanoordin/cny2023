@@ -11,8 +11,8 @@ const MAX_X = CNY2023_COLS * TILE_SIZE
 const MIN_RABBIT_X = MIN_X + TILE_SIZE
 const MAX_RABBIT_X = MAX_X - TILE_SIZE
 const MAX_Y = CNY2023_ROWS * TILE_SIZE
-const MIN_POINTER_MOVEMENT = 16
-const MAX_POINTER_MOVEMENT = 64
+const MIN_POINTER_MOVEMENT = TILE_SIZE / 2
+const MAX_POINTER_MOVEMENT = TILE_SIZE * 4
 
 /*
 This Rule handles most of the moment-to-moment gameplay.
@@ -69,6 +69,7 @@ export default class CNY2023Controls extends Rule {
         c2d.fill()
       })
       // ----------------
+
     } else if (layer === LAYERS.HUD) {
       if (app.playerAction === PLAYER_ACTIONS.POINTER_DOWN) {
         const { pointerCurrent, pointerStart } = app.playerInput
@@ -86,7 +87,6 @@ export default class CNY2023Controls extends Rule {
         c2d.lineTo(pointerCurrent.x, pointerStart.y)
         c2d.closePath()
         c2d.stroke()
-
       }
     }
   }
@@ -102,21 +102,25 @@ export default class CNY2023Controls extends Rule {
       pointerStart,
     } = app.playerInput
     const TIME_MODIFIER = timeStep / EXPECTED_TIMESTEP
+    let rabbitSpeed = CNY2023_RABBIT_SPEED / TIME_MODIFIER
 
     if (!hero) return
 
     let pointerMovementX = 0
     if (app.playerAction === PLAYER_ACTIONS.POINTER_DOWN) {
       pointerMovementX = (pointerCurrent?.x || 0) - (pointerStart?.x || 0)
+      const pointerDist = (Math.min(Math.max(Math.abs(pointerMovementX), MIN_POINTER_MOVEMENT), MAX_POINTER_MOVEMENT) - MIN_POINTER_MOVEMENT) / (MAX_POINTER_MOVEMENT - MIN_POINTER_MOVEMENT)
+      const pointerSpeedModifier = 1 + 1 * pointerDist
+      rabbitSpeed *= pointerSpeedModifier
     }
 
     if (keysPressed['ArrowLeft'] || buttonArrowLeftPressed || pointerMovementX < -MIN_POINTER_MOVEMENT) {
-      hero.pushX -= CNY2023_RABBIT_SPEED / TIME_MODIFIER
+      hero.pushX -= rabbitSpeed
       hero.direction = DIRECTIONS.WEST
     }
 
     if (keysPressed['ArrowRight'] || buttonArrowRightPressed || pointerMovementX > MIN_POINTER_MOVEMENT) {
-      hero.pushX += CNY2023_RABBIT_SPEED / TIME_MODIFIER
+      hero.pushX += rabbitSpeed
       hero.direction = DIRECTIONS.EAST
     }
   }
