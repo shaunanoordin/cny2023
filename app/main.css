@@ -213,7 +213,8 @@ table th {
   padding: 1em;
 }
 #app > main #rotate-prompt {
-  display: flex;
+  display: none;
+  /* Programmatically switch to display:flex to show */
   flex-direction: column;
   justify-content: center;
   background: #e0e0e0;
