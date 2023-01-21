@@ -2,7 +2,7 @@ import Rule from '@avo/rule'
 import { CNY2023_COLS, CNY2023_ROWS, LAYERS, TILE_SIZE } from '@avo/constants'
 
 const ANIMATION_TIME_TO_EXPAND_WIN_SCREEN = 200
-const ANIMATION_TIME_UNTIL_RETURN_TO_HOME_MENU = 5000
+const ANIMATION_TIME_UNTIL_RETURN_TO_HOME_MENU = 8000
 const MIN_X = 0
 const MIN_Y = 0
 const MAX_X = CNY2023_COLS * TILE_SIZE  // Canvas width
