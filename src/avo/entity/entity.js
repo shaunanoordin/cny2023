@@ -61,8 +61,8 @@ export default class Entity {
     this.doMaxSpeedLimit(timeStep)
 
     // Update position
-    const timeCorrection = 1
-    // const timeCorrection = (timeStep / EXPECTED_TIMESTEP)  // Edit: time correction may not be needed since Entities fix their own moveXY/pushXY values
+    // const timeCorrection = 1
+    const timeCorrection = (timeStep / EXPECTED_TIMESTEP)  // Edit: time correction may not be needed since Entities fix their own moveXY/pushXY values
     this.x += (this.moveX + this.pushX) * timeCorrection
     this.y += (this.moveY + this.pushY) * timeCorrection
 
@@ -171,7 +171,8 @@ export default class Entity {
   e.g. "if a hero is walking, ignore deceleration."
    */
   doMoveDeceleration (timeStep) {
-    const moveDeceleration = this.moveDeceleration * timeStep / EXPECTED_TIMESTEP || 0
+    const timeCorrection = timeStep / EXPECTED_TIMESTEP
+    const moveDeceleration = this.moveDeceleration * timeCorrection || 0
     const curRotation = Math.atan2(this.moveY, this.moveX)
     const newMoveSpeed = Math.max(0, this.moveSpeed - moveDeceleration)
     this.moveX = newMoveSpeed * Math.cos(curRotation)
@@ -179,7 +180,8 @@ export default class Entity {
   }
 
   doPushDeceleration (timeStep) {
-    const pushDeceleration = this.pushDeceleration * timeStep / EXPECTED_TIMESTEP || 0
+    const timeCorrection = timeStep / EXPECTED_TIMESTEP
+    const pushDeceleration = this.pushDeceleration * timeCorrection || 0
     const curRotation = Math.atan2(this.pushY, this.pushX)
     const newPushSpeed = Math.max(0, this.pushSpeed - pushDeceleration)
     this.pushX = newPushSpeed * Math.cos(curRotation)

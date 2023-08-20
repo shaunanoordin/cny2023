@@ -28,12 +28,12 @@ export default class CNY2023Controls extends Rule {
   play (timeStep) {
     const app = this._app
     const entities = app.entities
-    const TIME_MODIFIER = timeStep / EXPECTED_TIMESTEP
+    const timeCorrection = timeStep / EXPECTED_TIMESTEP
 
     // Gravity
     entities.forEach(entity => {
       if (entity.movable) {
-        entity.pushY += CNY2023_GRAVITY / TIME_MODIFIER
+        entity.pushY += CNY2023_GRAVITY * timeCorrection
       }
     })
 
@@ -105,8 +105,8 @@ export default class CNY2023Controls extends Rule {
       pointerCurrent,
       pointerStart,
     } = app.playerInput
-    const TIME_MODIFIER = timeStep / EXPECTED_TIMESTEP
-    let rabbitSpeed = CNY2023_RABBIT_SPEED / TIME_MODIFIER
+    const timeCorrection = timeStep / EXPECTED_TIMESTEP
+    let rabbitSpeed = CNY2023_RABBIT_SPEED * timeCorrection
 
     if (!hero) return
 
