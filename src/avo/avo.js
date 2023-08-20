@@ -8,6 +8,7 @@ import Physics from '@avo/physics'
 import Levels from '@avo/levels'
 import ImageAsset from '@avo/image-asset'
 import Interaction from '@avo/interaction'
+import { EXPECTED_TIMESTEP } from './constants'
 
 const searchParams = new URLSearchParams(window.location.search)
 const DEBUG = searchParams.get('debug') || false
@@ -95,6 +96,7 @@ export default class AvO {
 
     this.rotatePromptDismissed = false  // CNY2023
 
+    this.timeAccumulator = 0
     this.prevTime = null
     this.nextFrame = window.requestAnimationFrame(this.main.bind(this))
   }
@@ -152,9 +154,15 @@ export default class AvO {
   main (time) {
     const timeStep = (this.prevTime) ? time - this.prevTime : time
     this.prevTime = time
+    this.timeAccumulator += timeStep
 
     if (this.initialised) {
-      this.play(timeStep)
+      // Keep a consistent "frame rate" for logic processing
+      while (this.timeAccumulator >= EXPECTED_TIMESTEP) {
+        this.play(EXPECTED_TIMESTEP)
+        this.timeAccumulator -= EXPECTED_TIMESTEP
+      }
+      // Paint whenever possible
       this.paint()
     } else {
       this.initialisationCheck()
