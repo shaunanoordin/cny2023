@@ -3,16 +3,17 @@ import { CNY2023_COLS, CNY2023_ROWS, LAYERS, TILE_SIZE } from '@avo/constants'
 
 const ANIMATION_TIME_TO_EXPAND_WIN_SCREEN = 200
 const ANIMATION_TIME_UNTIL_RETURN_TO_HOME_MENU = 8000
-const MIN_X = 0
-const MIN_Y = 0
 const MAX_X = CNY2023_COLS * TILE_SIZE  // Canvas width
 const MAX_Y = CNY2023_ROWS * TILE_SIZE  // Canvas height
 const IMAGE_WIDTH = 1280
 const IMAGE_HEIGHT = 640
 
 const HUD_SCREEN_EDGE_X_OFFSET = TILE_SIZE * 1.5
-const HUD_SCREEN_EDGE_Y_OFFSET = TILE_SIZE * -1.0
+const HUD_SCREEN_EDGE_Y_OFFSET = TILE_SIZE * 1.0
 const FLOOR_HEIGHT_OFFSET = (CNY2023_ROWS - 1.5) * TILE_SIZE
+
+const searchParams = new URLSearchParams(window.location.search)
+const DEBUG = searchParams.get('debug') || false
 
 /*
 This Rule keeps track of scores and the win/lose condition.
@@ -29,6 +30,7 @@ export default class CNY2023Goals extends Rule {
 
     this.score = 0
     this.maxScore = 0
+    this.fps = 0  // Frames Per Second, recorded for debug purposes
   }
 
   play (timeStep) {
@@ -47,6 +49,10 @@ export default class CNY2023Goals extends Rule {
         this.returnedToHomeMenu = true
       }
     }
+
+    if (DEBUG) {
+      this.fps = 1000 / timeStep
+    }
   }
 
   paint (layer = 0) {
@@ -64,7 +70,8 @@ export default class CNY2023Goals extends Rule {
       // ----------------
       const LEFT = HUD_SCREEN_EDGE_X_OFFSET
       const RIGHT = app.canvasWidth - HUD_SCREEN_EDGE_X_OFFSET
-      const BOTTOM = app.canvasHeight + HUD_SCREEN_EDGE_Y_OFFSET
+      const TOP = HUD_SCREEN_EDGE_Y_OFFSET * 2
+      const BOTTOM = app.canvasHeight - HUD_SCREEN_EDGE_Y_OFFSET
       c2d.font = '2em Verdana'
       c2d.textBaseline = 'bottom'
       c2d.lineWidth = 8
@@ -88,6 +95,16 @@ export default class CNY2023Goals extends Rule {
       c2d.strokeText(text, LEFT, BOTTOM)
       c2d.fillStyle = '#c44'
       c2d.fillText(text, LEFT, BOTTOM)
+
+      // Print FPS
+      if (DEBUG) {
+        text = `${this.fps?.toFixed(2)} FPS`
+        c2d.textAlign = 'right'
+        c2d.strokeStyle = '#fff'
+        c2d.strokeText(text, RIGHT, TOP)
+        c2d.fillStyle = '#c44'
+        c2d.fillText(text, RIGHT, TOP)
+      }
       // ----------------
 
     } else {  // Rabbit reached the moon OR crashed

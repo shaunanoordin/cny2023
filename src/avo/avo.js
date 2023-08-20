@@ -7,7 +7,6 @@ import {
 import Physics from '@avo/physics'
 import Levels from '@avo/levels'
 import ImageAsset from '@avo/image-asset'
-import JsonAsset from '@avo/json-asset'
 import Interaction from '@avo/interaction'
 
 const searchParams = new URLSearchParams(window.location.search)
